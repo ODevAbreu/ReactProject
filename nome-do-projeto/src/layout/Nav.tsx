@@ -1,5 +1,6 @@
 import React from "react";
-// import logo from './logo.svg'; <img src={logo} className="App-logo" alt="logo" />
+import './Nav.css';
+//import logo from './logo.svg'; <img src={logo} className="App-logo" alt="logo" />
 const Nav : React.FC<{}> = ({ }) => {
     return (
         <nav className="navbar">
