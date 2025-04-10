@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
-import Menu from './layout/Menu';
+import Nav from './layout/Nav';
+
 
 function App() {
   return (
-    <Menu/>
+    <Nav></Nav>
   );
 }
 

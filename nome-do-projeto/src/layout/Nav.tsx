@@ -1,6 +1,6 @@
 import React from "react";
 // import logo from './logo.svg'; <img src={logo} className="App-logo" alt="logo" />
-const Menu: React.FC<{}> = ({ }) => {
+const Nav : React.FC<{}> = ({ }) => {
     return (
         <nav className="navbar">
             <div className="container">
@@ -23,4 +23,4 @@ const Menu: React.FC<{}> = ({ }) => {
 
     );
 }
-export default Menu;
+export default Nav;
