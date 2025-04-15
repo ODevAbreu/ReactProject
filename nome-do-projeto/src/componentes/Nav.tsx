@@ -6,7 +6,7 @@ const Nav : React.FC<{}> = ({ }) => {
         <nav className="navbar">
             <div className="container">
                 <a className="navbar-brand" href="#">
-                    <img src="images/logo.png" alt="Coffee or Nothing" className="logo"/>
+                    <img src="./src/images/logo.png" alt="Coffee or Nothing" className="logo"/>
                 </a>
                 <button className="mobile-menu-btn" id="menuBtn">
                     <span></span>
