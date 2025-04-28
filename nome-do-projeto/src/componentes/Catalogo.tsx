@@ -28,7 +28,7 @@ const Catalogo: React.FC = () => {
 
       <main className="catalogo d-flex">
         <aside id="aside" className="p-3" style={{ width: '250px' }}>
-          <Link to="/incluirproduto">
+          <Link to="/prodincluir">
             <button style={{ width: "100%" }} className="btn btn-primary mb-3">
               Cadastrar Produto
             </button>
