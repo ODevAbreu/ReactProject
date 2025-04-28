@@ -7,22 +7,18 @@ import Home from './componentes/HomePage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProdIncluir from './componentes/prodIncluir';
 import Catalogo from './componentes/Catalogo';
+
 function App() {
   return (
-   
     <BrowserRouter>
-    
       <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/catalogo" element={<Catalogo />} />
-            {/* <Route path="/usuario/:id" element={<Usuario />} /> */}
-       {/* <Route path="/prodIncluir" element={<ProdIncluir />} /> */}
-
+        <Route path="/prodincluir" element={<ProdIncluir />} />
       </Routes>
-      <Home></Home>
     </BrowserRouter>
-
-
-    // <ProdIncluir></ProdIncluir>
   );
 }
 

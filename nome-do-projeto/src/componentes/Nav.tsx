@@ -1,33 +1,31 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import './Nav.css';
 
 
-//import logo from './logo.svg'; <img src={logo} className="App-logo" alt="logo" />
 
-const Nav: React.FC<{}> = ({ }) => {
+const Nav: React.FC = () => {
     return (
         <nav className="navbar">
             <div className="container">
-                <a className="navbar-brand" href="#">
-                    <img src="./src/images/logo.png" alt="Coffee or Nothing" className="logo"/>
-                </a>
+                <Link className="navbar-brand" to="/">
+                <img src="/imagens/logo.png" alt="Coffee or Nothing" className="logo" />
+                </Link>
+
                 <button className="mobile-menu-btn" id="menuBtn">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
+
                 <ul className="nav-links" id="navLinks">
-                    <li><a href="#home" className="active">Início</a></li>
-                    <li><a href="/catalogo">Catalogo</a></li>
-                    <li><a href="./login.html">Entre ou Cadastrar-se</a></li>
+                    <li><Link to="/" className="active">Início</Link></li>
+                    <li><Link to="/catalogo">Catálogo</Link></li>
+                    <li><Link to="/login">Entre ou Cadastrar-se</Link></li>
                 </ul>
-            </div>   
-
+            </div>
         </nav>
-
-
-
-
     );
 }
+
 export default Nav;

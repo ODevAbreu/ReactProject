@@ -1,146 +1,100 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Nav from './Nav';
+// import coffeeImage from '../assets/imagens/coffe.jpeg'; // Descomente e ajuste o caminho para sua imagem real
 
 const Catalogo: React.FC = () => {
+  // Simulação de produtos para listar no catálogo
+  const produtos = [
+    {
+      id: 1,
+      nome: "Cappuccino",
+      descricao: "Delicioso cappuccino cremoso",
+      preco: 12.5,
+      imagem: "/imagens/coffe.jpeg", // caminho relativo público
+    },
+    {
+      id: 2,
+      nome: "Expresso",
+      descricao: "Café expresso forte",
+      preco: 9.0,
+      imagem: "/imagens/coffe.jpeg",
+    },
+  ];
+
   return (
     <>
-    <Nav /> 
-  <meta charSet="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catalogo</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-    crossOrigin="anonymous"
-  />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    rel="stylesheet"
-    href="{{ url_for('static', path='css/catalogo.css') }}"
-  />
-  <style
-    dangerouslySetInnerHTML={{
-      __html: "\n  .navbar{\n    position: relative !important;\n  }\n\n"
-    }}
-  />
-  <main className="catalogo">
-    <aside id="aside">
-      <a href="./incluirproduto">
-        <button style={{ width: "100%" }} className="btn btn-primary">
-          Cadastrar Produto
-        </button>
-      </a>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          id="filtro"
-          aria-describedby="filtro"
-          placeholder="Procurar Produtos"
-        />
-      </div>
-      <div className="filtrar">
-        <h6>Tipo de Café</h6>
-        <div className="filtros">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            defaultValue=""
-            id="flexCheckDefault1"
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault1">
-            Cappuccino
-          </label>
-        </div>
-        <div className="filtros">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            defaultValue=""
-            id="flexCheckDefault2"
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault2">
-            Expresso
-          </label>
-        </div>
-        <div className="filtros">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            defaultValue=""
-            id="flexCheckDefault3"
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault3">
-            Latte
-          </label>
-        </div>
-        <div className="filtros">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            defaultValue=""
-            id="flexCheckDefault4"
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault4">
-            Mocha
-          </label>
-        </div>
-      </div>
-      <button id="filtrar" className="btn btn-primary">
-        Filtrar
-      </button>
-    </aside>
-    <div className="card-deck">
-      {/* {% for prod in produtos %} */}
-      <div className="card" style={{ width: "18rem" }}>
-        <img
-          className="card-img-top"
-          src="{{ url_for('static', path='imagens/coffe.jpeg') }}"
-          alt="imagem do produto"
-          width={150}
-        />
-        <div className="card-body">
-          <h5 className="card-title">
-            {"{"}
-            {"{"}prod.Nome_Produto{"}"}
-            {"}"}
-          </h5>
-          <p className="card-text">
-            {"{"}
-            {"{"}prod.Descr_Produto{"}"}
-            {"}"}
-          </p>
-          <div className="d-flex justify-content-between align-items-center">
-            {/* <a>R${{prod.Preco_prod}}</a> */}
-            <a
-              href="./prodatualizar?id={{prod.ID_Produto}}"
-              className="btn btn-primary"
-            >
-              Alterar
-            </a>
-            <a
-              href="./prodexcluir?id={{prod.ID_Produto}}"
-              className="btn btn-primary"
-            >
-              Excluir
-            </a>
-            <a href="./carrinho.html" className="btn btn-primary">
-              Comprar
-            </a>
+      <Nav />
+
+      <main className="catalogo d-flex">
+        <aside id="aside" className="p-3" style={{ width: '250px' }}>
+          <Link to="/incluirproduto">
+            <button style={{ width: "100%" }} className="btn btn-primary mb-3">
+              Cadastrar Produto
+            </button>
+          </Link>
+
+          <div className="form-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="filtro"
+              placeholder="Procurar Produtos"
+            />
           </div>
+
+          <div className="filtrar">
+            <h6>Tipo de Café</h6>
+            {["Cappuccino", "Expresso", "Latte", "Mocha"].map((tipo, idx) => (
+              <div className="form-check" key={idx}>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id={`tipo-${idx}`}
+                />
+                <label className="form-check-label" htmlFor={`tipo-${idx}`}>
+                  {tipo}
+                </label>
+              </div>
+            ))}
+          </div>
+
+          <button id="filtrar" className="btn btn-primary mt-3">
+            Filtrar
+          </button>
+        </aside>
+
+        <div className="card-deck d-flex flex-wrap justify-content-center gap-4 p-4">
+          {produtos.map((prod) => (
+            <div key={prod.id} className="card" style={{ width: "18rem" }}>
+              <img
+                className="card-img-top"
+                src={prod.imagem}
+                alt="imagem do produto"
+              />
+              <div className="card-body">
+                <h5 className="card-title">{prod.nome}</h5>
+                <p className="card-text">{prod.descricao}</p>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span>R${prod.preco.toFixed(2)}</span>
+                  <div className="btn-group">
+                    <Link to={`/prodatualizar?id=${prod.id}`} className="btn btn-primary btn-sm">
+                      Alterar
+                    </Link>
+                    <Link to={`/prodexcluir?id=${prod.id}`} className="btn btn-danger btn-sm">
+                      Excluir
+                    </Link>
+                    <Link to="/carrinho" className="btn btn-success btn-sm">
+                      Comprar
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    </div>
-  </main>
-</>
+      </main>
+    </>
   );
 };
 
