@@ -1,8 +1,10 @@
 import React from 'react';
+import Nav from './Nav';
 
 const Home: React.FC = () => {
   return (
-    <div id="app">
+
+    <><Nav /><div id="app">
       <section className="hero" id="home">
         <div className="container">
           <div className="hero-content">
@@ -95,7 +97,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </div></>
   );
 };
 

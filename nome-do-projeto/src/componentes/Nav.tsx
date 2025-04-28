@@ -1,7 +1,10 @@
 import React from "react";
 import './Nav.css';
+
+
 //import logo from './logo.svg'; <img src={logo} className="App-logo" alt="logo" />
-const Nav : React.FC<{}> = ({ }) => {
+
+const Nav: React.FC<{}> = ({ }) => {
     return (
         <nav className="navbar">
             <div className="container">
@@ -15,11 +18,14 @@ const Nav : React.FC<{}> = ({ }) => {
                 </button>
                 <ul className="nav-links" id="navLinks">
                     <li><a href="#home" className="active">Início</a></li>
-                    <li><a href="catalogo.html">Catalogo</a></li>
+                    <li><a href="/catalogo">Catalogo</a></li>
                     <li><a href="./login.html">Entre ou Cadastrar-se</a></li>
                 </ul>
-            </div>
+            </div>   
+
         </nav>
+
+
 
 
     );
