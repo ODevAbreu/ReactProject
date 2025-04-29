@@ -9,7 +9,7 @@ const Nav: React.FC = () => {
         <nav className="navbar">
             <div className="container">
                 <Link className="navbar-brand" to="/">
-                <img src="/imagens/logo.png" alt="Coffee or Nothing" className="logo" />
+                <img src="/img/logo.png" alt="Coffee or Nothing" className="logo" />
                 </Link>
 
                 <button className="mobile-menu-btn" id="menuBtn">
@@ -19,7 +19,7 @@ const Nav: React.FC = () => {
                 </button>
 
                 <ul className="nav-links" id="navLinks">
-                    <li><Link to="/" className="active">Início</Link></li>
+                    <li><Link to="/">Início</Link></li>
                     <li><Link to="/catalogo">Catálogo</Link></li>
                     <li><Link to="/login">Entre ou Cadastrar-se</Link></li>
                 </ul>

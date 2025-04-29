@@ -12,7 +12,7 @@ const Login: React.FC = () => {
                 {/* Imagem do café */}
                 <div className="col-md-6 d-none d-md-block">
                   <img
-                    src="/img/loginimg1.jpg"  // se estiver em public/img
+                    src="/img/loginimg1.jpg" width={350}  // se estiver em public/img
                     alt="Xícara de café"
                     className="coffee-img"
                   />

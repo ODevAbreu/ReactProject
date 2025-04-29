@@ -11,14 +11,14 @@ const Catalogo: React.FC = () => {
       nome: "Cappuccino",
       descricao: "Delicioso cappuccino cremoso",
       preco: 12.5,
-      imagem: "/imagens/coffe.jpeg", // caminho relativo público
+      imagem: "/img/coffe.jpeg", // caminho relativo público
     },
     {
       id: 2,
       nome: "Expresso",
       descricao: "Café expresso forte",
       preco: 9.0,
-      imagem: "/imagens/coffe.jpeg",
+      imagem: "/img/coffe.jpeg",
     },
   ];
 
