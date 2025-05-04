@@ -1,27 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
+import { ProdModel } from '../model/Prod.Model';
+import ProdService from '../service/ProdService';
 // import coffeeImage from '../assets/imagens/coffe.jpeg'; // Descomente e ajuste o caminho para sua imagem real
 
 const Catalogo: React.FC = () => {
-  // Simulação de produtos para listar no catálogo
-  const produtos = [
-    {
-      id: 1,
-      nome: "Cappuccino",
-      descricao: "Delicioso cappuccino cremoso",
-      preco: 12.5,
-      imagem: "/img/coffe.jpeg", // caminho relativo público
-    },
-    {
-      id: 2,
-      nome: "Expresso",
-      descricao: "Café expresso forte",
-      preco: 9.0,
-      imagem: "/img/coffe.jpeg",
-    },
-  ];
 
+  const excluir = async (id: number) => {
+    const confirmar = window.confirm("Tem certeza que deseja excluir este produto?");
+    if (!confirmar) return;
+
+    try {
+      await ProdService.excluir(id.toString()); 
+      setProdutos(produtos?.filter((p) => p.id !== id));
+    } catch (error) {
+      console.error("Erro ao excluir o produto:", error);
+      alert("Ocorreu um erro ao excluir o produto.");
+    }
+  };
+
+
+  const [produtos, setProdutos] = useState<ProdModel[]>();
+  useEffect(() => {
+    ProdService.listar().then((produtos) => {
+      const produtosMapeados = produtos.map((prod: { ID_Produto: any; Nome_Produto: any; Descr_Produto: any; Preco_prod: any; Tipo_prod: any; Qtn_Produto: any; imagem_prod: string; }) => ({
+        id: prod.ID_Produto,
+        nome: prod.Nome_Produto,
+        descr: prod.Descr_Produto,
+        preco: prod.Preco_prod,
+        tipo: prod.Tipo_prod,
+        quantidade: prod.Qtn_Produto,
+        imagem: prod.imagem_prod !== "null" ? prod.imagem_prod : "/img/default.jpg",
+      }));
+      console.log(produtosMapeados); // Agora será exibido apenas uma vez
+      setProdutos(produtosMapeados);
+    });
+  }, []);
   return (
     <>
       <Nav />
@@ -65,7 +80,7 @@ const Catalogo: React.FC = () => {
         </aside>
 
         <div className="card-deck d-flex flex-wrap justify-content-center gap-4 p-4">
-          {produtos.map((prod) => (
+          {produtos?.map((prod) => (
             <div key={prod.id} className="card" style={{ width: "18rem" }}>
               <img
                 className="card-img-top"
@@ -74,16 +89,22 @@ const Catalogo: React.FC = () => {
               />
               <div className="card-body">
                 <h5 className="card-title">{prod.nome}</h5>
-                <p className="card-text">{prod.descricao}</p>
+                <p className="card-text">{prod.descr}</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <span>R${prod.preco.toFixed(2)}</span>
                   <div className="btn-group">
-                    <Link to={`/prodatualizar?id=${prod.id}`} className="btn btn-primary btn-sm">
+                    <Link to={`/prodincluir/${prod.id}`} className="btn btn-primary btn-sm">
                       Alterar
                     </Link>
-                    <Link to={`/prodexcluir?id=${prod.id}`} className="btn btn-danger btn-sm">
+                    {/* <Link to={`/prodexcluir?id=${prod.id}`} className="btn btn-danger btn-sm">
                       Excluir
-                    </Link>
+                    </Link> */}
+                    <button
+                      onClick={() => excluir(prod.id)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Excluir
+                    </button>
                     <Link to="/carrinho" className="btn btn-success btn-sm">
                       Comprar
                     </Link>

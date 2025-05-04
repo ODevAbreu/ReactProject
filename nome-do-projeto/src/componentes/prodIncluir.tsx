@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import './style.css';
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 import prodService from "../service/ProdService";
 
 const ProdIncluir: React.FC = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate();
   const [nome, setNome] = React.useState('');
   const [descr, setDescr] = React.useState('');
   const [tipo, setTipo] = React.useState('');
@@ -14,6 +15,21 @@ const ProdIncluir: React.FC = () => {
   const [qtd, setQtd] = React.useState(0);
 
   const {id} = useParams();
+
+  useEffect(() => {        
+    if (id) {
+        prodService.buscarPorId(id).then(produtos => {
+            console.log(produtos)
+            setNome(produtos.Nome_Produto);
+            setDescr(produtos.Descr_Produto);
+            setTipo(produtos.Tipo_prod);
+            setPreco(produtos.Preco_prod);
+            setQtd(produtos.Qtn_Produto);
+        });
+    } else {
+        console.log('id não econtrado');
+    }        
+},[id]);
 
   const salvar = () => {  
     console.log(id)
@@ -30,10 +46,11 @@ const ProdIncluir: React.FC = () => {
       , tipo: tipo
       , preco: preco
       , qtd: qtd
-
+      , imagem: null
 
     }).then(result => {
       console.log("Salvou com sucesso!");
+      navigate('/Catalogo');
       console.log(result);
     }, error => {
       console.log(error);
@@ -70,9 +87,6 @@ const ProdIncluir: React.FC = () => {
                   <h1 className="fw-bold text-center mb-4">Cadastro de Produto</h1>
                   <form
                     className="w3-container"
-                    action="/prodincluir_exe"
-                    method="post"
-                    encType="multipart/form-data"
                   >
                     <div className="row">
                       <div className="mb-3">
@@ -87,6 +101,7 @@ const ProdIncluir: React.FC = () => {
                           placeholder="Digite o Nome do Produto"
                           minLength={5}
                           required={true}
+                          value={nome}
                           onChange={(e) => { setNome(e.target.value) }}
                         />
                       </div>
@@ -99,7 +114,7 @@ const ProdIncluir: React.FC = () => {
                           id="descr_prod"
                           name="descr"
                           rows={2}
-                          defaultValue={""}
+                          value={descr}
                           placeholder="Digite a descrição do produto"
                           onChange={(e) => { setDescr(e.target.value) }}
                         />
@@ -112,6 +127,7 @@ const ProdIncluir: React.FC = () => {
                         </label>
                         <select name="tipo" id="tipo_prod" className="form-select"
                           required={true}
+                          value={tipo}
                           onChange={(e) => { setTipo(e.target.value) }}>
                           <option value="">Selecione o tipo do produto</option>
                           <option>Bebida</option>
@@ -132,6 +148,7 @@ const ProdIncluir: React.FC = () => {
                           step="0.01"
                           placeholder="Digite o preço do produto"
                           required={true}
+                          value={preco}
                           onChange={(e) => { setPreco(parseFloat(e.target.value)) }}
                         />
                       </div>
@@ -148,6 +165,7 @@ const ProdIncluir: React.FC = () => {
                           className="form-control"
                           placeholder="Digite a quantidade do produto em estoque"
                           required={true}
+                          value={qtd}
                           onChange={(e) => { setQtd(parseInt(e.target.value)) }}
                         />
                       </div>

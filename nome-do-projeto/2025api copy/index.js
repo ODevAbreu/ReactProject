@@ -14,9 +14,9 @@ var mysql = require('mysql2');
 var conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "PUC@1234",
+    password: "",
     database: "coffee",
-    port:"3306"
+    port: "3306"
 });
 
 //tentando connectar
@@ -49,7 +49,7 @@ app.post('/api/usuario', function (req, res) {
     //valido se o usuário existe pelo id -> caso exista é um update    
     if (usuario.id) {
         sql = `UPDATE usuario SET nome = '${usuario.nome}'
-        WHERE id = ${usuario.id}`; 
+        WHERE id = ${usuario.id}`;
     } else {
         sql = `INSERT INTO usuario (nome) VALUES 
     ('${usuario.nome}')`;
@@ -87,7 +87,7 @@ app.listen(PORT, function (err) {
 
 app.get('/api/produto', function (req, res) {
     //cria a string the consulta no baco do tipo select
-    let sql = "SELECT p.id, p.nome, p.preco FROM produto p";
+    let sql = "SELECT * FROM produto p";
     //executando o comando sql com a função query
     //nela passamos a string de consulta
     //após a execução ele retorna o function que vai ter a variável err e result
@@ -98,28 +98,55 @@ app.get('/api/produto', function (req, res) {
         res.status(200).json(result);
     });
 }
-); 
+);
 
 app.post('/api/produto', function (req, res) {
     //captura o json com os dados do usuário
     var produto = req.body;
-
-    
-    var sql = '';
-
     //valido se o usuário existe pelo id -> caso exista é um update.    
     if (produto.id) {
-        sql = `UPDATE produto SET nome = '${produto.nome}', preco = '${produto.preco}'
-        WHERE id = ${produto.id}`; 
+        let sql = `UPDATE produto SET Nome_Produto = ?, Descr_Produto = ?, Tipo_prod = ?, Preco_prod = ?, Qtn_Produto = ?, imagem_prod = ? WHERE ID_Produto = ?`;
+        conn.query(sql, [produto.nome, produto.descr, produto.tipo, produto.preco, produto.qtd, produto.imagem, produto.id], (err, result) => {
+            if (err) res.status(500).json(err);
+            else res.status(200).json(result);
+        });
+
     } else {
-        sql = `INSERT INTO produto (Nome_Produto, Descr_Produto, Preco_prod, Tipo_prod, Qtn_Produto) VALUES 
-    ('${produto.nome}', '${produto.descr}', '${produto.preco}','${produto.tipo}', '${produto.qtd}')`;
+        sql = `INSERT INTO produto (Nome_Produto, Descr_Produto, Preco_prod, Tipo_prod, Qtn_Produto, imagem_prod) VALUES 
+    ('${produto.nome}', '${produto.descr}', '${produto.preco}','${produto.tipo}', '${produto.qtd}', '${produto.imagem}')`;
+
+        //executa o comando de insert ou update
+        conn.query(sql, function (err, result) {
+            if (err) throw err;
+        });
+        res.status(201).json(produto);
     }
-    //executa o comando de insert ou update
-    conn.query(sql, function (err, result) {
-        if (err) throw err;
-    });
-    res.status(201).json(produto);
 }
 );
-   
+
+app.delete('/api/produto/:id', function (req, res) {
+    const id = req.params.id;
+    const sql = "DELETE FROM produto WHERE ID_Produto = ?";
+
+    conn.query(sql, [id], function (err, result) {
+        if (err) {
+            console.error("Erro ao excluir produto:", err);
+            return res.status(500).json({ erro: err.message });
+        }
+        res.status(200).json({ mensagem: "Produto excluído com sucesso" });
+    });
+});
+
+app.get('/api/produto/:id', (req, res) => {
+    const { id } = req.params;
+
+    console.log(id)
+
+    let sql = `SELECT * FROM produto p WHERE p.ID_Produto = ${id}`;
+    conn.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log(result)
+        res.status(200).json(result[0]);
+    });
+});
+

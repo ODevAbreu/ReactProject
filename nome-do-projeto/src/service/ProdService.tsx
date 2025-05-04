@@ -28,11 +28,18 @@ const buscarPorId = async (id: string) => {
         }
     }) .then((response) => response.json());
 }
+const excluir = async (id: string, produto?: ProdModel) => {
+    return await fetch(`http://localhost:8080/api/produto/${id}`, {
+        method: "DELETE"
+    })
+        .then((response) => response.json());
+}
 
 const produtoService = {
     salvar,
     listar,
-    buscarPorId
+    buscarPorId,
+    excluir
 };
 
 export default produtoService;

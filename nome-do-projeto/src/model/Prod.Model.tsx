@@ -5,4 +5,5 @@ export interface ProdModel{
     tipo: string;
     preco: number;
     qtd: number;
+    imagem: any;
   }

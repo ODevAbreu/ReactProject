@@ -17,6 +17,7 @@ function App() {
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/prodincluir" element={<ProdIncluir />} />
+        <Route path="/prodincluir/:id" element={<ProdIncluir/>} />
       </Routes>
     </BrowserRouter>
   );
