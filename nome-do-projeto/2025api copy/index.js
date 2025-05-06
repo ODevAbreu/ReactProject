@@ -1,134 +1,100 @@
 const express = require('express');
 const cors = require('cors');
+const mysql = require('mysql2');
+
 const app = express();
 const PORT = 8080;
 
 app.use(express.json());
 app.use(cors());
 
-//importante o modulo de mysql teste
-var mysql = require('mysql2');
-
-//criando a variável conn que vai ter a referência de conexão
-//com o banco de dados
-var conn = mysql.createConnection({
+// Conexão com o banco de dados
+const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "1234",
+    password: "PUC@1234",
     database: "coffee",
     port: "3306"
 });
 
-//tentando connectar
-//a variável con tem a conexão agora
 conn.connect(function (err) {
     if (err) throw err;
     console.log("Connected!");
 });
 
-app.get('/api/usuario', function (req, res) {
-    //cria a string the consulta no baco do tipo select
-    let sql = "SELECT u.id, u.nome FROM usuario u";
-    //executando o comando sql com a função query
-    //nela passamos a string de consulta
-    //após a execução ele retorna o function que vai ter a variável err e result
-    //se deu algum erro a variável err terá o erro obtivo
-    //caso contrário o result terá dos dados do banco 
-    conn.query(sql, function (err, result) {
-        if (err) res.status(500).json(err);
+// Buscar todos os usuários
+app.get('/api/usuario', (req, res) => {
+    const sql = "SELECT id, nome, email, cpf, telefone, dataNascimento FROM usuario";
+    conn.query(sql, (err, result) => {
+        if (err) return res.status(500).json();
         res.status(200).json(result);
     });
 });
 
-//endpoint para salvar um usuário
-app.post('/api/usuario', function (req, res) {
-    //captura o json com os dados do usuário
-    var usuario = req.body;
-    //variável sql par armazenar o comando que vai rodar no banco
-    var sql = '';
-    //valido se o usuário existe pelo id -> caso exista é um update    
-    if (usuario.id) {
-        sql = `UPDATE usuario SET nome = '${usuario.nome}'
-        WHERE id = ${usuario.id}`;
-    } else {
-        sql = `INSERT INTO usuario (nome) VALUES 
-    ('${usuario.nome}')`;
+// Cadastrar ou atualizar um usuário
+app.post('/api/usuario', (req, res) => {
+    const usuario = req.body; 
+        sql = `INSERT INTO usuario (nome, email, senha, cpf, telefone, dataNascimento) VALUES 
+        ('${usuario.nome}', '${usuario.email}', '${usuario.senha}', '${usuario.cpf}', '${usuario.telefone}', '${usuario.dataNascimento}')`;
+        conn.query(sql, (err, result) => {
+            if (err) return res.status(500).json({ message : "error de inserçao"});
+            res.status(201).json({ id: result.insertId, ...usuario });
+        });
     }
-    //executa o comando de insert ou update
-    conn.query(sql, function (err, result) {
-        if (err) throw err;
-    });
-    res.status(201).json(usuario);
-});
+);
 
-//endpoint para capturar um usuário por id
+// Buscar usuário por ID
 app.get('/api/usuario/:id', (req, res) => {
     const { id } = req.params;
-
-    console.log(id)
-
-    let sql = `SELECT u.id, u.nome FROM usuario u WHERE u.id = ${id}`;
-    conn.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log(result)
+    const sql = "SELECT id, nome, email, cpf, telefone, dataNascimento FROM usuario WHERE id = ?";
+    conn.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json(err);
+        if (result.length === 0) return res.status(404).json({ message: "Usuário não encontrado" });
         res.status(200).json(result[0]);
     });
 });
 
-app.listen(PORT, function (err) {
+app.listen(PORT, (err) => {
     if (err) console.log(err);
     console.log("Server listening on PORT", PORT);
 });
 
+// CRUD dos Produtos
 
-
-//CRUD dos Produtos
-
-
-app.get('/api/produto', function (req, res) {
-    //cria a string the consulta no baco do tipo select
-    let sql = "SELECT * FROM produto p";
-    //executando o comando sql com a função query
-    //nela passamos a string de consulta
-    //após a execução ele retorna o function que vai ter a variável err e result
-    //se deu algum erro a variável err terá o erro obtivo
-    //caso contrário o result terá dos dados do banco 
-    conn.query(sql, function (err, result) {
-        if (err) res.status(500).json(err);
+// Buscar todos os produtos
+app.get('/api/produto', (req, res) => {
+    const sql = "SELECT * FROM produto p";
+    conn.query(sql, (err, result) => {
+        if (err) return res.status(500).json(err);
         res.status(200).json(result);
     });
-}
-);
+});
 
-app.post('/api/produto', function (req, res) {
-    //captura o json com os dados do usuário
-    var produto = req.body;
-    //valido se o usuário existe pelo id -> caso exista é um update.    
+// Cadastrar ou atualizar produto
+app.post('/api/produto', (req, res) => {
+    const produto = req.body;
+
     if (produto.id) {
-        let sql = `UPDATE produto SET Nome_Produto = ?, Descr_Produto = ?, Tipo_prod = ?, Preco_prod = ?, Qtn_Produto = ?, imagem_prod = ? WHERE ID_Produto = ?`;
+        const sql = "UPDATE produto SET Nome_Produto = ?, Descr_Produto = ?, Tipo_prod = ?, Preco_prod = ?, Qtn_Produto = ?, imagem_prod = ? WHERE ID_Produto = ?";
         conn.query(sql, [produto.nome, produto.descr, produto.tipo, produto.preco, produto.qtd, produto.imagem, produto.id], (err, result) => {
-            if (err) res.status(500).json(err);
-            else res.status(200).json(result);
+            if (err) return res.status(500).json(err);
+            res.status(200).json(result);
         });
-
     } else {
-        sql = `INSERT INTO produto (Nome_Produto, Descr_Produto, Preco_prod, Tipo_prod, Qtn_Produto, imagem_prod) VALUES 
-    ('${produto.nome}', '${produto.descr}', '${produto.preco}','${produto.tipo}', '${produto.qtd}', '${produto.imagem}')`;
-
-        //executa o comando de insert ou update
-        conn.query(sql, function (err, result) {
-            if (err) throw err;
+        const sql = `INSERT INTO produto (Nome_Produto, Descr_Produto, Preco_prod, Tipo_prod, Qtn_Produto, imagem_prod) VALUES 
+        ('${produto.nome}', '${produto.descr}', '${produto.preco}', '${produto.tipo}', '${produto.qtd}', '${produto.imagem}')`;
+        conn.query(sql, (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.status(201).json(produto);
         });
-        res.status(201).json(produto);
     }
-}
-);
+});
 
-app.delete('/api/produto/:id', function (req, res) {
+// Deletar produto
+app.delete('/api/produto/:id', (req, res) => {
     const id = req.params.id;
     const sql = "DELETE FROM produto WHERE ID_Produto = ?";
-
-    conn.query(sql, [id], function (err, result) {
+    conn.query(sql, [id], (err, result) => {
         if (err) {
             console.error("Erro ao excluir produto:", err);
             return res.status(500).json({ erro: err.message });
@@ -137,16 +103,12 @@ app.delete('/api/produto/:id', function (req, res) {
     });
 });
 
+// Buscar produto por ID
 app.get('/api/produto/:id', (req, res) => {
     const { id } = req.params;
-
-    console.log(id)
-
-    let sql = `SELECT * FROM produto p WHERE p.ID_Produto = ${id}`;
-    conn.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log(result)
+    const sql = `SELECT * FROM produto p WHERE p.ID_Produto = ${id}`;
+    conn.query(sql, (err, result) => {
+        if (err) return res.status(500).json(err);
         res.status(200).json(result[0]);
     });
 });
-

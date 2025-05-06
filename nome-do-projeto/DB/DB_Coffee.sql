@@ -4,7 +4,7 @@ CREATE DATABASE coffee;
 USE coffee;
 
 CREATE TABLE Usuario (
-    Id int PRIMARY KEY AUTO_INCREMENT,
+    ID int PRIMARY KEY AUTO_INCREMENT,
     Nome VARCHAR(100),
     Email VARCHAR(50),
     Senha VARCHAR(100),
