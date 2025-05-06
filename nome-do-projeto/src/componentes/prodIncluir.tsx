@@ -46,7 +46,7 @@ const ProdIncluir: React.FC = () => {
       , tipo: tipo
       , preco: preco
       , qtd: qtd
-      , imagem: null
+      , imagem: "w"
 
     }).then(result => {
       console.log("Salvou com sucesso!");

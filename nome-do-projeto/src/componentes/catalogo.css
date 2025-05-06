@@ -1,0 +1,140 @@
+.catalogo {
+    width: 100%;
+    display: flex;
+
+}
+
+#aside {
+    width: 30%;
+    background-color: var(--secondary-color);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    color: var(--light-color);
+
+}
+
+aside input {
+    background-color: var(--light-color);
+}
+
+.form-control:focus {
+    box-shadow: 0 0 6px var(--primary-color);
+    border-color: var(--primary-color)
+}
+
+.card-deck {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    gap: 5%;
+    padding-left: 5%;
+    padding-right: 1.5%;
+    flex-wrap: wrap;
+
+}
+
+.card {
+    margin: 10px;
+    color: var(--light-color);
+    background-color: var(--secondary-color);
+}
+
+.btn {
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+.btn:hover,.btn:active{
+    background-color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+.navbar {
+    position: relative;
+}
+
+.filtro-mobile {
+    display: none;
+}
+
+@media (max-width: 1240px) {
+    .card-deck {
+        justify-content: space-evenly;
+    }
+}
+
+@media (max-width: 940px) {
+    .filtro-mobile{
+        display: flex;
+        align-items: center;
+        height: 60px;
+        justify-content: center;
+        background-color: var(--secondary-color);
+    }
+    #abrir-filtro{
+        width: 30%;
+    }
+    #aside{
+        display: none;
+        width: 100vw;
+        height: 100vh;
+    }
+    .filtrar{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    #filtrar{
+        width: 100%;
+        top: 0;
+    }
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 4rem 0 2rem;
+    align-content: end !important;
+}
+  
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+  
+.footer-brand h3 {
+    color: var(--light-color);
+    margin-bottom: 1rem;
+}
+  
+.footer-links h4,
+.footer-hours h4 {
+    color: var(--light-color);
+    margin-bottom: 1rem;
+}
+  
+.footer-links ul {
+    list-style: none;
+}
+  
+.footer-links a {
+    color: var(--light-color);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: var(--transition);
+}
+  
+.footer-links a:hover {
+    opacity: 1;
+}
+  
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

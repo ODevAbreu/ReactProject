@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Nav from './Nav';
 import { ProdModel } from '../model/Prod.Model';
 import ProdService from '../service/ProdService';
+import './catalogo.css'; // Ajuste o caminho para o seu arquivo CSS
 // import coffeeImage from '../assets/imagens/coffe.jpeg'; // Descomente e ajuste o caminho para sua imagem real
 
 const Catalogo: React.FC = () => {
@@ -12,7 +13,7 @@ const Catalogo: React.FC = () => {
     if (!confirmar) return;
 
     try {
-      await ProdService.excluir(id.toString()); 
+      await ProdService.excluir(id.toString());
       setProdutos(produtos?.filter((p) => p.id !== id));
     } catch (error) {
       console.error("Erro ao excluir o produto:", error);
@@ -31,7 +32,7 @@ const Catalogo: React.FC = () => {
         preco: prod.Preco_prod,
         tipo: prod.Tipo_prod,
         quantidade: prod.Qtn_Produto,
-        imagem: prod.imagem_prod !== "null" ? prod.imagem_prod : "/img/default.jpg",
+        imagem: prod.imagem_prod !== "null" ? prod.imagem_prod : "./img/coffe.jpeg", // Substitua pelo caminho correto da imagem padrão
       }));
       console.log(produtosMapeados); // Agora será exibido apenas uma vez
       setProdutos(produtosMapeados);
@@ -114,6 +115,34 @@ const Catalogo: React.FC = () => {
             </div>
           ))}
         </div>
+        <footer>
+          <div className="container">
+            <div className="footer-content">
+              <div className="footer-brand">
+                <h3>Coffee or Nothing</h3>
+                <p>O melhor café para o seu dia</p>
+              </div>
+              <div className="footer-links">
+                <h4>Links Rápidos</h4>
+                <ul>
+                  <li><a href="#home">Início</a></li>
+                  <li><Link to="/catalogo">Catálogo</Link></li>
+                  <li><a href="#about">Sobre</a></li>
+                  <li><a href="#contact">Contato</a></li>
+                </ul>
+              </div>
+              <div className="footer-hours">
+                <h4>Horário de Funcionamento</h4>
+                <p>Segunda a Sexta: 7h às 20h</p>
+                <p>Sábados e Domingos: 8h às 19h</p>
+              </div>
+            </div>
+
+            <div className="footer-bottom">
+              <p>&copy; 2025 Coffee or Nothing. Todos os direitos reservados.</p>
+            </div>
+          </div>
+        </footer>
       </main>
     </>
   );
