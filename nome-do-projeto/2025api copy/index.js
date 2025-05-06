@@ -12,7 +12,7 @@ app.use(cors());
 const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "PUC@1234",
+    password: "1234",
     database: "coffee",
     port: "3306"
 });
@@ -34,8 +34,9 @@ app.get('/api/usuario', (req, res) => {
 // Cadastrar ou atualizar um usuário
 app.post('/api/usuario', (req, res) => {
     const usuario = req.body; 
-        sql = `INSERT INTO usuario (nome, email, senha, cpf, telefone, dataNascimento) VALUES 
-        ('${usuario.nome}', '${usuario.email}', '${usuario.senha}', '${usuario.cpf}', '${usuario.telefone}', '${usuario.dataNascimento}')`;
+        sql = `INSERT INTO usuario (Nome, Email, Senha, DT_Nasc, Telefone, CPF) VALUES 
+        ('${usuario.nome}', '${usuario.email}', '${usuario.senha}',  '${usuario.dataNascimento}',
+        '${usuario.telefone}', '${usuario.cpf}')`;
         conn.query(sql, (err, result) => {
             if (err) return res.status(500).json({ message : "error de inserçao"});
             res.status(201).json({ id: result.insertId, ...usuario });
