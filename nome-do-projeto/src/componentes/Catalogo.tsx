@@ -115,7 +115,8 @@ const Catalogo: React.FC = () => {
             </div>
           ))}
         </div>
-        <footer>
+    </main>
+      <footer>
           <div className="container">
             <div className="footer-content">
               <div className="footer-brand">
@@ -143,7 +144,6 @@ const Catalogo: React.FC = () => {
             </div>
           </div>
         </footer>
-      </main>
     </>
   );
 };
