@@ -12,7 +12,7 @@ app.use(cors());
 const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "1234",
+    password: "PUC@1234",
     database: "coffee",
     port: "3306"
 });
@@ -24,7 +24,7 @@ conn.connect(function (err) {
 
 // Buscar todos os usuários
 app.get('/api/usuario', (req, res) => {
-    const sql = "SELECT id, nome, email, cpf, telefone, dataNascimento FROM usuario";
+    const sql = "SELECT id, nome, email, senha, Dt_Nasc, telefone, cpf FROM usuario";
     conn.query(sql, (err, result) => {
         if (err) return res.status(500).json();
         res.status(200).json(result);
@@ -34,7 +34,7 @@ app.get('/api/usuario', (req, res) => {
 // Cadastrar ou atualizar um usuário
 app.post('/api/usuario', (req, res) => {
     const usuario = req.body; 
-        sql = `INSERT INTO usuario (Nome, Email, Senha, DT_Nasc, Telefone, CPF) VALUES 
+        sql = `INSERT INTO usuario (nome, email, senha, Dt_Nasc, telefone, cpf) VALUES 
         ('${usuario.nome}', '${usuario.email}', '${usuario.senha}',  '${usuario.dataNascimento}',
         '${usuario.telefone}', '${usuario.cpf}')`;
         conn.query(sql, (err, result) => {
@@ -44,16 +44,7 @@ app.post('/api/usuario', (req, res) => {
     }
 );
 
-// Buscar usuário por ID
-app.get('/api/usuario/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = "SELECT id, nome, email, cpf, telefone, dataNascimento FROM usuario WHERE id = ?";
-    conn.query(sql, [id], (err, result) => {
-        if (err) return res.status(500).json(err);
-        if (result.length === 0) return res.status(404).json({ message: "Usuário não encontrado" });
-        res.status(200).json(result[0]);
-    });
-});
+
 
 app.listen(PORT, (err) => {
     if (err) console.log(err);

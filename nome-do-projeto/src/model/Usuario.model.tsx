@@ -3,8 +3,8 @@ export interface UsuarioModel {
     nome: string;
     email: string;
     senha: string;
-    cpf: string;
+    Dt_Nasc: string;
     telefone: string;
-    dataNascimento: string;
+    cpf: string;
   }
   

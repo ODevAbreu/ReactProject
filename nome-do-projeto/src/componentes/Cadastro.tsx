@@ -24,7 +24,7 @@ const Cadastro: React.FC = () => {
             setSenha(usuario.senha);
             setCpf(usuario.cpf);
             setTelefone(usuario.telefone);
-            setDataNascimento(usuario.dataNascimento);
+            setDataNascimento(usuario.Dt_Nasc);
         });
     } else {
         console.log('id não encontrado');
@@ -47,7 +47,7 @@ const Cadastro: React.FC = () => {
       senha: senha,
       cpf: cpf,
       telefone: telefone,
-      dataNascimento: dataNascimento
+      Dt_Nasc: dataNascimento
     }).then(result => {
       console.log("Salvou com sucesso!");
       navigate('/login'); 
