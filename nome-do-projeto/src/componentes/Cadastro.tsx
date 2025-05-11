@@ -47,7 +47,7 @@ const Cadastro: React.FC = () => {
       senha: senha,
       cpf: cpf,
       telefone: telefone,
-      Dt_Nasc: dataNascimento
+      Dt_Nasc: dataNascimento,
     }).then(result => {
       console.log("Salvou com sucesso!");
       navigate('/login'); 
