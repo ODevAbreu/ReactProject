@@ -9,7 +9,6 @@ import Nav from './Nav';
 // import cafeteria from '../assets/cafeteriaw.png';
 
 const Home: React.FC = () => {
-  const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado") || "{}");
   return (
     <>
       <Nav />
