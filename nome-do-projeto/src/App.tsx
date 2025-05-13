@@ -12,15 +12,15 @@ import ListarUsuario from './componentes/listar_usuarios';
 function App() {
   return (
     <BrowserRouter>
+      <Nav /> {/* ✅ Adicionado fora do Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/prodincluir" element={<ProdIncluir />} />
-        <Route path="/prodincluir/:id" element={<ProdIncluir/>} />
-        <Route path="/listarUsuario" element={<ListarUsuario/>} />
-
+        <Route path="/prodincluir/:id" element={<ProdIncluir />} />
+        <Route path="/listarUsuario" element={<ListarUsuario />} />
       </Routes>
     </BrowserRouter>
   );

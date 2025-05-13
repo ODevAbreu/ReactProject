@@ -23,9 +23,10 @@ const Login: React.FC = () => {
       const data = await response.json();
 
       if (data.success) {
-        alert("Login bem-sucedido!");
-        navigate("/");
-      } else {
+        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+      window.location.href = "/";
+}
+      else {
         setErro("E-mail ou senha inválidos.");
       }
     } catch (error) {

@@ -121,7 +121,7 @@ app.post("/login", (req, res) => {
     }
 
     if (results.length > 0) {
-      res.json({ success: true, user: results[0] });
+      res.json({ success: true, usuario: results[0] });
     } else {
       res.json({ success: false, message: "Credenciais inválidas" });
     }

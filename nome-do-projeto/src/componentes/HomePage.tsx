@@ -11,8 +11,6 @@ import Nav from './Nav';
 const Home: React.FC = () => {
   return (
     <>
-      <Nav />
-
       <div id="app">
         <section className="hero" id="home">
           <div className="container">

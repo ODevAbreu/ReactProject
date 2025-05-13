@@ -40,8 +40,6 @@ const Catalogo: React.FC = () => {
   }, []);
   return (
     <>
-      <Nav />
-
       <main className="catalogo d-flex">
         <aside id="aside" className="p-3" style={{ width: '250px' }}>
           <Link to="/prodincluir">
