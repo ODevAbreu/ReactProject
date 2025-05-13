@@ -12,7 +12,7 @@ app.use(cors());
 const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "PUC@1234",
+    password: "1234",
     database: "coffee",
     port: "3306"
 });
@@ -35,9 +35,10 @@ app.get('/api/usuario', (req, res) => {
 app.post('/api/usuario', (req, res) => {
     const usuario = req.body; 
         sql = `INSERT INTO usuario (nome, email, senha, Dt_Nasc, telefone, cpf) VALUES 
-        ('${usuario.nome}', '${usuario.email}', '${usuario.senha}',  '${usuario.dataNascimento}',
+        ('${usuario.nome}', '${usuario.email}', '${usuario.senha}',  '${usuario.Dt_Nasc}',
         '${usuario.telefone}', '${usuario.cpf}')`;
         conn.query(sql, (err, result) => {
+            console.log(err);
             if (err) return res.status(500).json({ message : "error de inserçao"});
             res.status(201).json({ id: result.insertId, ...usuario });
         });
@@ -103,4 +104,26 @@ app.get('/api/produto/:id', (req, res) => {
         if (err) return res.status(500).json(err);
         res.status(200).json(result[0]);
     });
+});
+// Rota de login
+app.post("/login", (req, res) => {
+  const { email, senha } = req.body;
+
+  if (!email || !senha) {
+    return res.status(400).json({ success: false, message: "Campos obrigatórios" });
+  }
+
+  const query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+  conn.query(query, [email, senha], (err, results) => {
+    if (err) {
+      console.error("Erro ao consultar o banco:", err);
+      return res.status(500).json({ success: false, message: "Erro no servidor" });
+    }
+
+    if (results.length > 0) {
+      res.json({ success: true, user: results[0] });
+    } else {
+      res.json({ success: false, message: "Credenciais inválidas" });
+    }
+  });
 });

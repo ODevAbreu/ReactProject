@@ -1,7 +1,42 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Login bem-sucedido!");
+        navigate("/");
+      } else {
+        setErro("E-mail ou senha inválidos.");
+      }
+    } catch (error) {
+      setErro("Erro ao conectar com o servidor.");
+    }
+  };
+
+  const alternarVisibilidadeSenha = () => {
+    setMostrarSenha((prev) => !prev);
+  };
+
   return (
     <section className="vh-100 d-flex justify-content-center align-items-center">
       <div className="container">
@@ -9,19 +44,18 @@ const Login: React.FC = () => {
           <div className="col-md-10 col-lg-8">
             <div className="card shadow-lg overflow-hidden">
               <div className="row g-0">
-                {/* Imagem do café */}
                 <div className="col-md-6 d-none d-md-block">
                   <img
-                    src="/img/loginimg1.jpg" width={350}  // se estiver em public/img
+                    src="/img/loginimg1.jpg"
+                    width={350}
                     alt="Xícara de café"
                     className="coffee-img"
                   />
                 </div>
-                {/* Formulário de login */}
                 <div className="col-md-6">
                   <div className="card-body text-black form-container">
                     <h1 className="fw-bold text-center mb-4">Login</h1>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="mb-3">
                         <label className="form-label" htmlFor="email">
                           E-mail
@@ -31,6 +65,9 @@ const Login: React.FC = () => {
                           id="email"
                           className="form-control"
                           placeholder="seuemail@gmail.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
                         />
                       </div>
                       <div className="mb-3">
@@ -39,20 +76,26 @@ const Login: React.FC = () => {
                         </label>
                         <div className="input-group">
                           <input
-                            type="password"
+                            type={mostrarSenha ? "text" : "password"}
                             id="senha"
                             className="form-control"
                             placeholder="Digite sua senha"
+                            value={senha}
+                            onChange={(e) => setSenha(e.target.value)}
+                            required
                           />
                           <button
                             className="btn btn-outline-secondary"
                             type="button"
-                            id="toggleSenha"
+                            onClick={alternarVisibilidadeSenha}
                           >
-                            <i className="bi bi-eye" />
+                            <i className={`bi ${mostrarSenha ? "bi-eye-slash" : "bi-eye"}`} />
                           </button>
                         </div>
                       </div>
+                      {erro && (
+                        <p className="text-danger text-center">{erro}</p>
+                      )}
                       <div className="d-grid mt-4">
                         <button className="btn btn-custom btn-custom" type="submit">
                           Entrar
