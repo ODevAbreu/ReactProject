@@ -36,7 +36,7 @@ const Nav: React.FC = () => {
 
           {usuario ? (
             <>
-              <li><span>Olá, {usuario.nome}</span></li>
+              <li><span>Olá, {usuario.Nome}</span></li>
               <li>
                 <button className="btn btn-sm btn-danger" onClick={handleLogout}>
                   Sair

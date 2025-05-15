@@ -1,8 +1,8 @@
 /* ListarUsuario.styles.css */
 .container-listagem {
   padding-top: 100px;
-  padding-bottom: 80px;
-  max-width: 1000px;
+  padding-bottom: 100px;
+  width: 1250px;
   margin: 0 auto;
 }
 
@@ -42,11 +42,11 @@
 
 .col-id { width: 5%; }
 .col-nome { width: 20%; }
-.col-email { width: 20%; }
+.col-email { width: 28%; }
 .col-cpf { width: 15%; }
 .col-telefone { width: 15%; }
-.col-data { width: 15%; }
-.col-acoes { width: 10%; }
+.col-data { width: 20%; }
+.col-acoes { width: 30%; }
 
 .tabela-usuarios tbody tr {
   transition: background 0.3s;

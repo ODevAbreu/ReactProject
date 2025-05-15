@@ -25,19 +25,20 @@ const ListarUsuario: React.FC = () => {
     };
     carregarUsuarios();
   }, []);
-
-  const handleDelete = async (id: any) => {
+  
+  const excluir = async (id: any) => {
     if (window.confirm("Tem certeza que deseja deletar este usuário?")) {
       try {
-        // Você precisará adicionar o método de deletar no seu service
-        // await usuarioService.deletar(id);
-        setUsuarios(usuarios.filter(usuario => usuario.id !== id));
+        // Chama o método de exclusão do serviço, passando o ID do usuário
+        const dados = await usuarioService.excluir(id); // Passando o id como argumento
+        setUsuarios(usuarios.filter(usuario => usuario.id !== id)); // Atualiza o estado para remover o usuário excluído
       } catch (err) {
         setError("Erro ao deletar usuário");
         console.error(err);
       }
     }
   };
+  
 
 
 
@@ -94,7 +95,7 @@ const ListarUsuario: React.FC = () => {
                     </Link>
                     <button
                     className="botao-deletar"
-                    onClick={() => handleDelete(usuario.id)}
+                    onClick={() => excluir(usuario.id)}
                     title="Deletar usuário"
                     >
                     <span role="img" aria-label="deletar">🗑️</span> Deletar

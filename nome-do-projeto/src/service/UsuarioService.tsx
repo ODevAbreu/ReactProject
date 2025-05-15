@@ -29,10 +29,27 @@ const buscarPorId = async (id: string) => {
     }) .then((response) => response.json());
 }
 
+const excluir = async (id: string) => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/usuario/${id}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao excluir usuário');
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Erro ao excluir o usuário', err);
+        throw err;
+    }
+}
 const usuarioService = {
     salvar,
     listar,
-    buscarPorId
+    buscarPorId,
+    excluir
 };
 
 export default usuarioService;

@@ -12,7 +12,7 @@ app.use(cors());
 const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "1234",
+    password: "PUC@1234",
     database: "coffee",
     port: "3306"
 });
@@ -44,6 +44,19 @@ app.post('/api/usuario', (req, res) => {
         });
     }
 );
+
+app.delete('/api/usuario/:id', (req, res) => {
+    console.log("chamou")
+    const id = req.params.id;
+    const sql = "DELETE FROM usuario WHERE id = ?";
+    conn.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Erro ao excluir usuário:", err);
+            return res.status(500).json({ erro: err.message });
+        }
+        res.status(200).json({ mensagem: "Usuario excluído com sucesso" });
+    });
+});
 
 
 
