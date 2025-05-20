@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import Nav from './Nav';
 import { ProdModel } from '../model/Prod.Model';
 import ProdService from '../service/ProdService';
-import './catalogo.css'; // Ajuste o caminho para o seu arquivo CSS
-// import coffeeImage from '../assets/imagens/coffe.jpeg'; // Descomente e ajuste o caminho para sua imagem real
+import './catalogo.css';
 
 const Catalogo: React.FC = () => {
 
@@ -21,7 +20,6 @@ const Catalogo: React.FC = () => {
     }
   };
 
-
   const [produtos, setProdutos] = useState<ProdModel[]>();
   useEffect(() => {
     ProdService.listar().then((produtos) => {
@@ -32,12 +30,14 @@ const Catalogo: React.FC = () => {
         preco: prod.Preco_prod,
         tipo: prod.Tipo_prod,
         quantidade: prod.Qtn_Produto,
-        imagem: prod.imagem_prod !== "null" ? prod.imagem_prod : "./img/coffe.jpeg", // Substitua pelo caminho correto da imagem padrão
+        imagem: prod.imagem_prod && prod.imagem_prod !== "null"
+          ? `http://localhost:8080${prod.imagem_prod}`
+          : "/img/coffe.jpeg",
       }));
-      console.log(produtosMapeados); // Agora será exibido apenas uma vez
       setProdutos(produtosMapeados);
     });
   }, []);
+
   return (
     <>
       <main className="catalogo d-flex">
@@ -85,6 +85,7 @@ const Catalogo: React.FC = () => {
                 className="card-img-top"
                 src={prod.imagem}
                 alt="imagem do produto"
+                style={{ maxHeight: '200px', objectFit: 'cover' }}
               />
               <div className="card-body">
                 <h5 className="card-title">{prod.nome}</h5>
@@ -95,9 +96,6 @@ const Catalogo: React.FC = () => {
                     <Link to={`/prodincluir/${prod.id}`} className="btn btn-primary btn-sm">
                       Alterar
                     </Link>
-                    {/* <Link to={`/prodexcluir?id=${prod.id}`} className="btn btn-danger btn-sm">
-                      Excluir
-                    </Link> */}
                     <button
                       onClick={() => excluir(prod.id)}
                       className="btn btn-danger btn-sm"
@@ -113,35 +111,36 @@ const Catalogo: React.FC = () => {
             </div>
           ))}
         </div>
-    </main>
-      <footer>
-          <div className="container">
-            <div className="footer-content">
-              <div className="footer-brand">
-                <h3>Coffee or Nothing</h3>
-                <p>O melhor café para o seu dia</p>
-              </div>
-              <div className="footer-links">
-                <h4>Links Rápidos</h4>
-                <ul>
-                  <li><a href="#home">Início</a></li>
-                  <li><Link to="/catalogo">Catálogo</Link></li>
-                  <li><a href="#about">Sobre</a></li>
-                  <li><a href="#contact">Contato</a></li>
-                </ul>
-              </div>
-              <div className="footer-hours">
-                <h4>Horário de Funcionamento</h4>
-                <p>Segunda a Sexta: 7h às 20h</p>
-                <p>Sábados e Domingos: 8h às 19h</p>
-              </div>
-            </div>
+      </main>
 
-            <div className="footer-bottom">
-              <p>&copy; 2025 Coffee or Nothing. Todos os direitos reservados.</p>
+      <footer>
+        <div className="container">
+          <div className="footer-content">
+            <div className="footer-brand">
+              <h3>Coffee or Nothing</h3>
+              <p>O melhor café para o seu dia</p>
+            </div>
+            <div className="footer-links">
+              <h4>Links Rápidos</h4>
+              <ul>
+                <li><a href="#home">Início</a></li>
+                <li><Link to="/catalogo">Catálogo</Link></li>
+                <li><a href="#about">Sobre</a></li>
+                <li><a href="#contact">Contato</a></li>
+              </ul>
+            </div>
+            <div className="footer-hours">
+              <h4>Horário de Funcionamento</h4>
+              <p>Segunda a Sexta: 7h às 20h</p>
+              <p>Sábados e Domingos: 8h às 19h</p>
             </div>
           </div>
-        </footer>
+
+          <div className="footer-bottom">
+            <p>&copy; 2025 Coffee or Nothing. Todos os direitos reservados.</p>
+          </div>
+        </div>
+      </footer>
     </>
   );
 };

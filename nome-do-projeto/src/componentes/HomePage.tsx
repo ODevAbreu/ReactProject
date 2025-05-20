@@ -17,10 +17,6 @@ const Home: React.FC = () => {
             <div className="hero-content">
               <h1>Bem-vindo ao Coffee or Nothing</h1>
               <p>Descubra o prazer de um café verdadeiramente especial</p>
-              <div className="hero-buttons">
-                <a href="#menu" className="cta-button primary">Conheça nosso Menu</a>
-                <Link to="/cadastro" className="cta-button secondary">Cadastre-se</Link>
-              </div>
             </div>
           </div>
           <div className="hero-overlay"></div>

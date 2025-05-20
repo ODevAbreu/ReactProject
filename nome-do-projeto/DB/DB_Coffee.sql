@@ -23,8 +23,8 @@ CREATE TABLE Produto (
     Descr_Produto VARCHAR(500),
     Preco_prod FLOAT,
     Tipo_prod VARCHAR(50),
-    Qtn_Produto INT,\
-    imagem_prod,
+    Qtn_Produto INT,
+    imagem_prod VARCHAR(100),
 );
 
 CREATE TABLE Faz (

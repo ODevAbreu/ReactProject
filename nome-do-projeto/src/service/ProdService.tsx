@@ -34,12 +34,24 @@ const excluir = async (id: string, produto?: ProdModel) => {
     })
         .then((response) => response.json());
 }
+const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return await fetch(`http://localhost:8080/api/upload`, {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => response.json());
+}
+
 
 const produtoService = {
     salvar,
     listar,
     buscarPorId,
-    excluir
+    excluir,
+    uploadFile
 };
 
 export default produtoService;
