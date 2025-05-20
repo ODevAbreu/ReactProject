@@ -48,9 +48,8 @@ const Login: React.FC = () => {
                 <div className="col-md-6 d-none d-md-block">
                   <img
                     src="/img/loginimg1.jpg"
-                    width={350}
                     alt="Xícara de café"
-                    className="coffee-img"
+                    className="img-fluid w-100 h-100 object-fit-cover"
                   />
                 </div>
                 <div className="col-md-6">

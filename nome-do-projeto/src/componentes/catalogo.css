@@ -51,6 +51,34 @@ aside input {
     border: 1px solid var(--accent-color);
 }
 
+.btn-primary {
+  background-color: #4A3428 !important;
+  border-color: #4A3428 !important;
+}
+
+.btn-primary:hover {
+  background-color: #4A3428 !important;
+  border-color: #4A3428 !important;
+}
+
+.btn-danger{
+   background-color: #8B5E3C !important;
+   border-color: #8B5E3C !important; 
+}
+.btn-danger:hover {
+  background-color: #8B5E3C !important;
+  border-color: #8B5E3C !important;
+}
+
+.btn-success{
+   background-color: #D4A574 !important;
+   border-color: #D4A574 !important; 
+}
+.btn-success:hover {
+  background-color: #D4A574 !important;
+  border-color: #D4A574 !important;
+}
+
 .navbar {
     position: relative;
 }
