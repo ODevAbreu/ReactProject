@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProdIncluir from './componentes/prodIncluir';
 import Catalogo from './componentes/Catalogo';
 import ListarUsuario from './componentes/listar_usuarios';
+import CadastroEndereco from './componentes/CadastroEndereco';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/prodincluir" element={<ProdIncluir />} />
         <Route path="/prodincluir/:id" element={<ProdIncluir />} />
         <Route path="/listarUsuario" element={<ListarUsuario />} />
+        <Route path="/CadastroEndereco" element={<CadastroEndereco/>} />
       </Routes>
     </BrowserRouter>
   );
