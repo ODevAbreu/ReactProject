@@ -56,3 +56,14 @@ ALTER TABLE Tem ADD CONSTRAINT FK_Tem_2
     FOREIGN KEY (fk_Produto_ID_Produto)
     REFERENCES Produto (ID_Produto)
     ON DELETE SET NULL;
+
+INSERT INTO Usuario (Nome, Email, Senha, Dt_Nasc, Telefone, CPF, Tipo)
+VALUES (
+    'Administrador',
+    'admin@gmail.com',
+    'senha123',            -- ou já criptografada, se seu sistema usa hash
+    '1990-01-01',
+    '11999999999',
+    '000.000.000-00',
+    'adm'
+);
