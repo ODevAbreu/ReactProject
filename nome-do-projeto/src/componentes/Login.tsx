@@ -23,7 +23,9 @@ const Login: React.FC = () => {
       const data = await response.json();
 
       if (data.success) {
+        console.log('Login bem-sucedido:', data);
         localStorage.setItem("usuario", JSON.stringify(data.usuario));
+        localStorage.setItem("userRole", data.usuario.Tipo);
       window.location.href = "/";
 }
       else {

@@ -6,6 +6,8 @@ import ProdService from '../service/ProdService';
 import './catalogo.css';
 
 const Catalogo: React.FC = () => {
+  const role = localStorage.getItem("userRole");
+  const isAdm = role === "adm";
 
   const excluir = async (id: number) => {
     const confirmar = window.confirm("Tem certeza que deseja excluir este produto?");
@@ -42,11 +44,13 @@ const Catalogo: React.FC = () => {
     <>
       <main className="catalogo d-flex">
         <aside id="aside" className="p-3" style={{ width: '250px' }}>
-          <Link to="/prodincluir">
-            <button style={{ width: "100%" }} className="btn btn-primary mb-3">
-              Cadastrar Produto
-            </button>
-          </Link>
+          {isAdm && (
+            <Link to="/prodincluir">
+              <button style={{ width: "100%" }} className="btn btn-primary mb-3">
+                Cadastrar Produto
+              </button>
+            </Link>
+          )}
 
           <div className="form-group mb-3">
             <input
@@ -78,7 +82,7 @@ const Catalogo: React.FC = () => {
           </button>
         </aside>
 
-        <div className="card-deck d-flex flex-wrap justify-content-center gap-4 p-4">
+                <div className="card-deck d-flex flex-wrap justify-content-center gap-4 p-4">
           {produtos?.map((prod) => (
             <div key={prod.id} className="card" style={{ width: "18rem" }}>
               <img
@@ -93,18 +97,23 @@ const Catalogo: React.FC = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <span>R${prod.preco.toFixed(2)}</span>
                   <div className="btn-group">
-                    <Link to={`/prodincluir/${prod.id}`} className="btn btn-primary btn-sm">
-                      Alterar
-                    </Link>
-                    <button
-                      onClick={() => excluir(prod.id)}
-                      className="btn btn-danger btn-sm"
-                    >
-                      Excluir
-                    </button>
-                    <Link to="/carrinho" className="btn btn-success btn-sm">
-                      Comprar
-                    </Link>
+                    {isAdm ? (
+                      <>
+                        <Link to={`/prodincluir/${prod.id}`} className="btn btn-primary btn-sm">
+                          Alterar
+                        </Link>
+                        <button
+                          onClick={() => excluir(prod.id)}
+                          className="btn btn-danger btn-sm"
+                        >
+                          Excluir
+                        </button>
+                      </>
+                    ) : (
+                      <Link to="/carrinho" className="btn btn-success btn-sm">
+                        Comprar
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
