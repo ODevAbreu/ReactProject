@@ -9,11 +9,12 @@ import ProdIncluir from './componentes/prodIncluir';
 import Catalogo from './componentes/Catalogo';
 import ListarUsuario from './componentes/listar_usuarios';
 import CadastroEndereco from './componentes/CadastroEndereco';
+import Footer from './componentes/Footer';
 
 function App() {
   return (
     <BrowserRouter>
-      <Nav /> {/* ✅ Adicionado fora do Routes */}
+       {/* <Nav /> ✅ Adicionado fora do Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -24,8 +25,9 @@ function App() {
         <Route path="/listarUsuario" element={<ListarUsuario />} />
         <Route path="/CadastroEndereco" element={<CadastroEndereco/>} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
-}
+} 
 
 export default App;

@@ -6,8 +6,10 @@ import ProdService from '../service/ProdService';
 import './catalogo.css';
 
 const Catalogo: React.FC = () => {
-  const role = localStorage.getItem("userRole");
-  const isAdm = role === "adm";
+  const usuario = localStorage.getItem("usuario");
+  const usuariojson = usuario ? JSON.parse(usuario) : null;
+  const ADM = usuariojson.ADM;
+  console.log("Usuário logado:", usuariojson);
 
   const excluir = async (id: number) => {
     const confirmar = window.confirm("Tem certeza que deseja excluir este produto?");
@@ -42,15 +44,16 @@ const Catalogo: React.FC = () => {
 
   return (
     <>
+      <Nav />
       <main className="catalogo d-flex">
         <aside id="aside" className="p-3" style={{ width: '250px' }}>
-          {isAdm && (
+          {ADM ? (
             <Link to="/prodincluir">
               <button style={{ width: "100%" }} className="btn btn-primary mb-3">
                 Cadastrar Produto
               </button>
             </Link>
-          )}
+          ) : null}
 
           <div className="form-group mb-3">
             <input
@@ -82,7 +85,7 @@ const Catalogo: React.FC = () => {
           </button>
         </aside>
 
-                <div className="card-deck d-flex flex-wrap justify-content-center gap-4 p-4">
+        <div className="card-deck d-flex flex-wrap justify-content-center gap-4 p-4">
           {produtos?.map((prod) => (
             <div key={prod.id} className="card" style={{ width: "18rem" }}>
               <img
@@ -97,7 +100,7 @@ const Catalogo: React.FC = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <span>R${prod.preco.toFixed(2)}</span>
                   <div className="btn-group">
-                    {isAdm ? (
+                    {ADM  ? (
                       <>
                         <Link to={`/prodincluir/${prod.id}`} className="btn btn-primary btn-sm">
                           Alterar
@@ -121,35 +124,6 @@ const Catalogo: React.FC = () => {
           ))}
         </div>
       </main>
-
-      <footer>
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-brand">
-              <h3>Coffee or Nothing</h3>
-              <p>O melhor café para o seu dia</p>
-            </div>
-            <div className="footer-links">
-              <h4>Links Rápidos</h4>
-              <ul>
-                <li><a href="#home">Início</a></li>
-                <li><Link to="/catalogo">Catálogo</Link></li>
-                <li><a href="#about">Sobre</a></li>
-                <li><a href="#contact">Contato</a></li>
-              </ul>
-            </div>
-            <div className="footer-hours">
-              <h4>Horário de Funcionamento</h4>
-              <p>Segunda a Sexta: 7h às 20h</p>
-              <p>Sábados e Domingos: 8h às 19h</p>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <p>&copy; 2025 Coffee or Nothing. Todos os direitos reservados.</p>
-          </div>
-        </div>
-      </footer>
     </>
   );
 };

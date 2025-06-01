@@ -21,10 +21,12 @@ const listar = async () => {
 }
 
 const buscarPorId = async (id: string) => {
+    const token = localStorage.getItem("token");
     return await fetch(`http://localhost:8080/api/usuario/${id}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            "Authorization":`cafezada ${token}`
         }
     }) .then((response) => response.json());
 }
@@ -45,11 +47,28 @@ const excluir = async (id: string) => {
         throw err;
     }
 }
+
+const login = async (email: string, senha: string) => {
+    return await fetch(`http://localhost:8080/usuario/login`, {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+                email: email,
+                senha: senha
+            })
+
+    }).then((response) => response.json());
+
+}
+
 const usuarioService = {
     salvar,
     listar,
     buscarPorId,
-    excluir
+    excluir,
+    login
 };
 
 export default usuarioService;

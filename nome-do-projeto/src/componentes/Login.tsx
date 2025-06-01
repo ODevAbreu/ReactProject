@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import usuarioService from "../service/UsuarioService";
+import Swal from 'sweetalert2';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -12,29 +14,49 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, senha }),
-      });
+      usuarioService.login(email, senha).then(result => {
+        // console.log(result);
+        if (result.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Login bem-sucedido',
+            text: result.message || 'E-mail ou senha inválidos.',
+          });
+          localStorage.setItem("token", JSON.stringify(result.token));
+          localStorage.setItem("usuario", JSON.stringify(result.usuario));
+          // localStorage.setItem("usuario", JSON.stringify(result.usuario));
+          navigate("/");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: result.message || 'E-mail ou senha inválidos.',
+          });
+        }
 
-      const data = await response.json();
+      })
+      // const data = await response.json();
 
-      if (data.success) {
-        console.log('Login bem-sucedido:', data);
-        localStorage.setItem("usuario", JSON.stringify(data.usuario));
-        localStorage.setItem("userRole", data.usuario.Tipo);
-      window.location.href = "/";
-}
-      else {
-        setErro("E-mail ou senha inválidos.");
-      }
+      // if (data.success) {
+      //   console.log('Login bem-sucedido:', data);
+      //   localStorage.setItem("usuario", JSON.stringify(data.usuario));
+      //   localStorage.setItem("userRole", data.usuario.Tipo);
+      // window.location.href = "/";
     } catch (error) {
-      setErro("Erro ao conectar com o servidor.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Erro ao conectar com o servidor.',
+      });
     }
-  };
+
+    //   else {
+    //     setErro("E-mail ou senha inválidos.");
+    //   }
+    // } catch (error) {
+    //   setErro("Erro ao conectar com o servidor.");
+    // }
+  }
 
   const alternarVisibilidadeSenha = () => {
     setMostrarSenha((prev) => !prev);

@@ -49,7 +49,6 @@ const Cadastro: React.FC = () => {
       telefone: telefone,
       Dt_Nasc: dataNascimento
     }).then(result => {
-      console.log("Salvou com sucesso!");
       navigate('/login'); 
       console.log(result);
     }).catch(error => {

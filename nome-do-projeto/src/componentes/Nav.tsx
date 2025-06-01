@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import './Nav.css';
+import usuarioService from "../service/UsuarioService";
 
 const Nav: React.FC = () => {
   const [usuario, setUsuario] = useState<any>(null);
   const [menuAberto, setMenuAberto] = useState(false);
 
-  useEffect(() => {
-    const dados = localStorage.getItem("usuario");
-    if (dados) {
-      setUsuario(JSON.parse(dados));
-    }
-  }, []);
 
-  const handleLogout = () => {
+  // const buscarUsuario = () =>{
+  //   usuarioService.buscarPorId().then(usuario => {
+  //     setUsuario(usuario);
+  //   });
+  // }
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("usuario");
+  if (token && user) {
+    const usuarioObj = JSON.parse(user);
+    setUsuario(usuarioObj);
+  }
+ 
+}, []);
+  const Deslogar = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("usuario");
     window.location.href = "/";
   };
@@ -34,16 +45,16 @@ const Nav: React.FC = () => {
           <span></span>
           <span></span>
         </button>
-
+        
         <ul className={`nav-links ${menuAberto ? 'active' : ''}`} id="navLinks">
           <li><Link to="/" onClick={() => setMenuAberto(false)}>Início</Link></li>
           <li><Link to="/catalogo" onClick={() => setMenuAberto(false)}>Catálogo</Link></li>
 
           {usuario ? (
             <>
-              <li><span><a>Olá, {usuario.Nome}</a></span></li>
+              <li><span><a>Olá,{usuario.Nome}</a></span></li>
               <li>
-                <button className="btn btn-sm btn-danger" onClick={handleLogout}>
+                <button className="btn btn-sm btn-danger" onClick={Deslogar}>
                   Sair
                 </button>
               </li>
