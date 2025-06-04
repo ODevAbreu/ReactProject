@@ -1,10 +1,12 @@
 export interface EnderecoModel{
-  ID_Endereco : any ; 
-  Rua : String ; 
-  Numero : String ; 
-  Cidade : String ; 
-  CEP : String ;
-  Bairro : String ; 
+  ID_Endereco?: number;  
+  Rua: string;
+  Numero: string;
+  Cidade: string;
+  CEP: string;
+  Bairro: string;
+  fk_ID_Usuario?: number; 
+}
+
     
 
-}

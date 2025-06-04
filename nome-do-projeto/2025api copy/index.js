@@ -201,3 +201,16 @@ app.listen(PORT, (err) => {
     if (err) console.log(err);
     console.log("Server listening on PORT", PORT);
 });
+
+// Rotas Do Endereço 
+
+app.post('/api/endereco', (req, res) => {
+    const endereco = req.body;
+    const sql = `INSERT INTO endereco (Rua,Numero,Cidade,CEP,Bairro,fk_ID_Usuario) VALUES 
+        ('${endereco.Rua}', '${endereco.Numero}', '${endereco.Cidade}', '${endereco.CEP}',
+        '${endereco.Bairro}', '${ endereco.fk_ID_Usuario}')`;
+    conn.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ message: "erro de inserção" , erro: err.message });
+        res.status(201).json({ id: result.insertId, ...endereco });
+    });
+});
