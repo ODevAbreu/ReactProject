@@ -11,12 +11,16 @@ const CadastroEndereco = () => {
   const [cidade, setCidade] = useState('');
 
   const Cadastrar = () => {
-    const usuarioId = Number(localStorage.getItem('id')); // busca o ID do usuário logado
-
+    const user = localStorage.getItem("usuario");
+    if (user){
+      const usuarioObj = JSON.parse(user);
+      const usuarioId = usuarioObj.Id
+    
     if (!usuarioId) {
       alert("Usuário não identificado. Faça login novamente.");
       return;
     }
+     
 
     const endereco = {
       CEP: cep,
@@ -35,6 +39,7 @@ const CadastroEndereco = () => {
         console.error(err);
         alert("Erro ao cadastrar endereço");
       });
+     }
   };
    
  

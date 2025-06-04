@@ -25,7 +25,7 @@ function App() {
         <Route path="/listarUsuario" element={<ListarUsuario />} />
         <Route path="/CadastroEndereco" element={<CadastroEndereco/>} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 } 

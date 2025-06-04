@@ -17,7 +17,7 @@ app.use('/uploads', express.static('uploads'));
 const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "PUC@1234",
     database: "coffee",
     port: "3306"
 });
