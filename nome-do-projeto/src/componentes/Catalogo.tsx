@@ -4,12 +4,15 @@ import Nav from './Nav';
 import { ProdModel } from '../model/Prod.Model';
 import ProdService from '../service/ProdService';
 import './catalogo.css';
+import Footer from './Footer';
 
 const Catalogo: React.FC = () => {
+  let ADM = false
   const usuario = localStorage.getItem("usuario");
+  if(usuario){
   const usuariojson = usuario ? JSON.parse(usuario) : null;
-  const ADM = usuariojson.ADM;
-  console.log("Usuário logado:", usuariojson);
+  ADM = usuariojson.ADM;
+}
 
   const excluir = async (id: number) => {
     const confirmar = window.confirm("Tem certeza que deseja excluir este produto?");
@@ -124,6 +127,7 @@ const Catalogo: React.FC = () => {
           ))}
         </div>
       </main>
+      <Footer/>
     </>
   );
 };

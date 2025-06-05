@@ -1,10 +1,12 @@
 import { ProdModel } from "../model/Prod.Model";
 
 const salvar = async (produto?: ProdModel) => {
+    const token = localStorage.getItem("token");
     return await fetch(`http://localhost:8080/api/produto`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "Authorization":`Beurer ${token}`
         },
         body: JSON.stringify(produto),
     })

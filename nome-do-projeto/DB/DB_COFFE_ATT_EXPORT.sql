@@ -49,7 +49,7 @@ CREATE TABLE produto (
   Preco_prod FLOAT,
   Tipo_prod VARCHAR(50),
   Qtn_Produto INT,
-  Img_Produto LONGBLOB
+  imagem_prod varchar(255) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Tabela qtd_produto

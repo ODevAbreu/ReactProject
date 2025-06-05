@@ -26,7 +26,7 @@ const buscarPorId = async (id: string) => {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization":`cafezada ${token}`
+            "Authorization":`Beurer ${token}`
         }
     }) .then((response) => response.json());
 }

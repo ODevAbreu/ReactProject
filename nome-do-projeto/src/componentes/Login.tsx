@@ -22,7 +22,8 @@ const Login: React.FC = () => {
             title: 'Login bem-sucedido',
             text: result.message || 'E-mail ou senha inválidos.',
           });
-          localStorage.setItem("token", JSON.stringify(result.token));
+          // localStorage.setItem("token",(result.token));
+          localStorage.setItem('token',result.token);
           localStorage.setItem("usuario", JSON.stringify(result.usuario));
           // localStorage.setItem("usuario", JSON.stringify(result.usuario));
           navigate("/");

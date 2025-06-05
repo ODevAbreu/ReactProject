@@ -135,20 +135,23 @@ app.get('/api/produto', (req, res) => {
     });
 });
 
-app.post('/api/produto', (req, res) => {
+app.post('/api/produto', Autenticar, (req, res) => {
     const produto = req.body;
-
+    
     if (produto.id) {
         const sql = "UPDATE produto SET Nome_Produto = ?, Descr_Produto = ?, Tipo_prod = ?, Preco_prod = ?, Qtn_Produto = ?, imagem_prod = ? WHERE ID_Produto = ?";
         conn.query(sql, [produto.nome, produto.descr, produto.tipo, produto.preco, produto.qtd, produto.imagem, produto.id], (err, result) => {
             if (err) return res.status(500).json(err);
             res.status(200).json(result);
+            console.log("erro")
         });
     } else {
         const sql = `INSERT INTO produto (Nome_Produto, Descr_Produto, Preco_prod, Tipo_prod, Qtn_Produto, imagem_prod) VALUES 
             ('${produto.nome}', '${produto.descr}', '${produto.preco}', '${produto.tipo}', '${produto.qtd}', '${produto.imagem}')`;
         conn.query(sql, (err, result) => {
+            // console.log(sql)
             if (err) return res.status(500).json(err);
+            // console.log("erro")
             res.status(201).json(produto);
         });
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
+import Footer from './Footer';
 
 // Se as imagens estiverem no /public/img, não precisa importar.
 // Se estiverem em /src/assets, você importa assim:
@@ -74,6 +75,7 @@ const Home: React.FC = () => {
           </div>
         </section>
       </div>
+      <Footer/>
     </>
   );
 };
