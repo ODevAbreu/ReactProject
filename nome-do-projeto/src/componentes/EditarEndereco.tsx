@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Inputmask from "inputmask";
+import { useParams } from "react-router-dom";
 import enderecoService from "../service/EnderecoService";
 
-const CadastroEndereco = () => {
+const EditarEndereco = () => {
   const [cep, setCep] = useState('');
   const [rua, setRua] = useState('');
   const [numero, setNumero] = useState('');
   const [bairro, setBairro] = useState('');
   const [cidade, setCidade] = useState('');
+  const { id } = useParams(); // <- vindo da rota tipo /editar-endereco/:id
 
   useEffect(() => {
     Inputmask("99999-999").mask(document.getElementById("cep") as HTMLInputElement);
 
-    if (sessionStorage.getItem("enderecoAtualizado") === "true") {
-      Swal.fire({
-        icon: "success",
-        title: "Sucesso!",
-        text: "Endereço atualizado com sucesso!"
+    // Carregar dados existentes usando o serviço
+    enderecoService.buscarPorId(id as string)
+      .then((data) => {
+        setCep(data.CEP || '');
+        setRua(data.Rua || '');
+        setNumero(data.Numero || '');
+        setBairro(data.Bairro || '');
+        setCidade(data.Cidade || '');
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Erro ao carregar endereço",
+          text: err.message
+        });
       });
-      sessionStorage.removeItem("enderecoAtualizado");
-    }
-  }, []);
+}, [id]);
 
   const buscarCep = () => {
     const cepLimpo = cep.replace("-", "");
@@ -58,47 +69,32 @@ const CadastroEndereco = () => {
       });
   };
 
-  const Cadastrar = () => {
-    const user = localStorage.getItem("usuario");
-    if (user) {
-      const usuarioObj = JSON.parse(user);
-      const usuarioId = usuarioObj.Id;
+  const atualizarEndereco = () => {
+    const enderecoAtualizado = {
+      CEP: cep,
+      Rua: rua,
+      Numero: numero,
+      Bairro: bairro,
+      Cidade: cidade
+    };
 
-      if (!usuarioId) {
+    enderecoService.atualizar(Number(id), enderecoAtualizado)
+      .then(() => {
+        sessionStorage.setItem("enderecoAtualizado", "true");
         Swal.fire({
-          icon: "warning",
-          title: "Erro",
-          text: "Usuário não identificado. Faça login novamente."
+          icon: "success",
+          title: "Sucesso!",
+          text: "Endereço atualizado com sucesso!"
         });
-        return;
-      }
-
-      const endereco = {
-        CEP: cep,
-        Rua: rua,
-        Numero: numero,
-        Bairro: bairro,
-        Cidade: cidade,
-        fk_ID_Usuario: usuarioId
-      };
-
-      enderecoService.salvar(endereco)
-        .then(() => {
-          Swal.fire({
-            icon: "success",
-            title: "Sucesso!",
-            text: "Endereço cadastrado com sucesso!"
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-          Swal.fire({
-            icon: "error",
-            title: "Erro ao cadastrar",
-            text: "Não foi possível salvar o endereço."
-          });
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Erro ao atualizar",
+          text: "Não foi possível atualizar o endereço."
         });
-    }
+      });
   };
 
   return (
@@ -108,8 +104,8 @@ const CadastroEndereco = () => {
           <div className="col-md-12 col-lg-9">
             <div className="card p-4" style={{ borderRadius: "1rem" }}>
               <div className="card-body text-black">
-                <h1 className="fw-bold text-center mb-4">Cadastro de Endereço</h1>
-                <form className="w3-container">
+                <h1 className="fw-bold text-center mb-4">Editar Endereço</h1>
+                <form>
                   <div className="mb-3">
                     <label className="form-label" htmlFor="cep">CEP</label>
                     <input
@@ -118,10 +114,9 @@ const CadastroEndereco = () => {
                       className="form-control"
                       required
                       pattern="\d{5}-\d{3}"
-                      placeholder="00000-000"
                       value={cep}
                       onChange={(e) => setCep(e.target.value)}
-                      onBlur={buscarCep} // <- AQUI está o segredo
+                      onBlur={buscarCep}
                     />
                   </div>
                   <div className="mb-3">
@@ -131,7 +126,6 @@ const CadastroEndereco = () => {
                       id="rua"
                       className="form-control"
                       required
-                      minLength={3}
                       value={rua}
                       onChange={(e) => setRua(e.target.value)}
                     />
@@ -171,7 +165,7 @@ const CadastroEndereco = () => {
                   </div>
                   <div className="d-grid mt-4">
                     <button className="btn btn-dark btn-custom" type="button"
-                      onClick={Cadastrar}>Cadastrar</button>
+                      onClick={atualizarEndereco}>Atualizar</button>
                   </div>
                 </form>
               </div>
@@ -183,4 +177,4 @@ const CadastroEndereco = () => {
   );
 };
 
-export default CadastroEndereco;
+export default EditarEndereco;

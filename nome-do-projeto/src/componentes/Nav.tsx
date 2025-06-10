@@ -14,15 +14,15 @@ const Nav: React.FC = () => {
   //   });
   // }
 
-useEffect(() => {
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("usuario");
-  if (token && user) {
-    const usuarioObj = JSON.parse(user);
-    setUsuario(usuarioObj);
-  }
- 
-}, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("usuario");
+    if (token && user) {
+      const usuarioObj = JSON.parse(user);
+      setUsuario(usuarioObj);
+    }
+
+  }, []);
   const Deslogar = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("usuario");
@@ -45,14 +45,18 @@ useEffect(() => {
           <span></span>
           <span></span>
         </button>
-        
+
         <ul className={`nav-links ${menuAberto ? 'active' : ''}`} id="navLinks">
           <li><Link to="/" onClick={() => setMenuAberto(false)}>Início</Link></li>
           <li><Link to="/catalogo" onClick={() => setMenuAberto(false)}>Catálogo</Link></li>
 
           {usuario ? (
             <>
-              <li><span><a>Olá,{usuario.Nome}</a></span></li>
+              <li>
+                <Link to="/listarUsuario" className="text-decoration-none">
+                  Olá, {usuario.Nome}
+                </Link>
+              </li>
               <li>
                 <button className="btn btn-sm btn-danger" onClick={Deslogar}>
                   Sair

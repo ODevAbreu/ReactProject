@@ -10,6 +10,7 @@ import Catalogo from './componentes/Catalogo';
 import ListarUsuario from './componentes/listar_usuarios';
 import CadastroEndereco from './componentes/CadastroEndereco';
 import Footer from './componentes/Footer';
+import EditarEndereco from './componentes/EditarEndereco';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
         <Route path="/prodincluir/:id" element={<ProdIncluir />} />
         <Route path="/listarUsuario" element={<ListarUsuario />} />
         <Route path="/CadastroEndereco" element={<CadastroEndereco/>} />
+        <Route path="/editarendereco/" element={<EditarEndereco/>} />
+        <Route path="/editarendereco/:id" element={<EditarEndereco/>} />
       </Routes>
       {/* <Footer /> */}
     </BrowserRouter>

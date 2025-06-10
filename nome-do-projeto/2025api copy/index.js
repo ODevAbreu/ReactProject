@@ -217,3 +217,30 @@ app.post('/api/endereco', (req, res) => {
         res.status(201).json({ id: result.insertId, ...endereco });
     });
 });
+
+app.put('/api/endereco/:id', (req, res) => {
+  const id = req.params.id;
+  const { Rua, Numero, Cidade, CEP, Bairro } = req.body;
+
+  const sql = `
+    UPDATE endereco
+    SET Rua = ?, Numero = ?, Cidade = ?, CEP = ?, Bairro = ?
+    WHERE ID_Endereco = ?`;
+
+  conn.query(sql, [Rua, Numero, Cidade, CEP, Bairro, id], (err, result) => {
+    if (err) return res.status(500).json({ message: "Erro ao atualizar", erro: err.message });
+
+    res.status(200).json({ message: "Endereço atualizado com sucesso" });
+  });
+});
+
+app.get('/api/endereco/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = 'SELECT * FROM endereco WHERE ID_Endereco = ?';
+
+  conn.query(sql, [id], (err, result) => {
+    if (err) return res.status(500).json({ message: "Erro ao buscar", erro: err.message });
+    if (result.length === 0) return res.status(404).json({ message: "Endereço não encontrado" });
+    res.status(200).json(result[0]);
+  });
+});
