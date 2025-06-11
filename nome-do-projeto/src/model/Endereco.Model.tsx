@@ -1,5 +1,5 @@
 export interface EnderecoModel{
-  ID_Endereco?: number;  
+  id ?: any;  
   Rua: string;
   Numero: string;
   Cidade: string;

@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import Inputmask from "inputmask";
 import enderecoService from "../service/EnderecoService";
 
+
 const CadastroEndereco = () => {
   const [cep, setCep] = useState('');
   const [rua, setRua] = useState('');
@@ -74,6 +75,7 @@ const CadastroEndereco = () => {
       }
 
       const endereco = {
+ 
         CEP: cep,
         Rua: rua,
         Numero: numero,

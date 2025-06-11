@@ -244,3 +244,86 @@ app.get('/api/endereco/:id', (req, res) => {
     res.status(200).json(result[0]);
   });
 });
+
+app.get("/api/endereco/usuario/:id", (req, res) => {
+  const userId = req.params.id;
+
+  const sql = "SELECT * FROM endereco WHERE fk_ID_Usuario = ?";
+
+  conn.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar endereços do usuário:", err);
+      return res.status(500).json({ erro: "Erro ao buscar endereços" });
+    }
+
+    res.json(results); 
+  });
+});
+
+
+
+
+
+// Obtém carrinho do usuário
+app.get("/api/carrinho/:idUsuario", (req, res) => {
+  const idUsuario = req.params.idUsuario;
+  const sql = `SELECT c.fk_ID_Produto AS id, p.Nome_Produto AS nome, p.Descr_Produto AS descr,
+                      p.Preco_prod AS preco, c.Quantidade AS quantidade, p.imagem_prod AS imagemUrl
+               FROM carrinho c
+               JOIN produto p ON c.fk_ID_Produto = p.ID_Produto
+               WHERE c.fk_ID_Usuario = ?`;
+  conn.query(sql, [userId], (err, result) => {
+    if (err) return res.status(500).json([]); // Retorna array vazio em caso de erro
+    
+    // Retorna o resultado (que pode ser array vazio)
+    res.status(200).json(result || []); // Garante que nunca retorne null/undefined
+  });
+});
+
+// Atualiza quantidade de um produto no carrinho
+app.post("/api/carrinho/:idUsuario/atualizar/:idProduto", (req, res) => {
+  const { idUsuario, idProduto } = req.params;
+  const { qtd } = req.body;
+  const sql = `UPDATE carrinho SET Quantidade = ? WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
+  conn.query(sql, [qtd, idUsuario, idProduto], (err) => {
+    if (err) return res.status(500).json({ erro: err.message });
+    res.sendStatus(200);
+  });
+});
+
+// Adiciona produto ao carrinho ou incrementa quantidade
+app.post("/api/carrinho/:idUsuario/adicionar", (req, res) => {
+  const { idUsuario } = req.params;
+  const { idProduto, quantidade } = req.body;
+  const sqlCheck = `SELECT Quantidade FROM carrinho WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
+  conn.query(sqlCheck, [idUsuario, idProduto], (err, rows) => {
+    if (err) return res.status(500).json({ erro: err.message });
+    if (rows.length > 0) {
+      const novaQtd = rows[0].Quantidade + quantidade;
+      const sqlUpd = `UPDATE carrinho SET Quantidade = ? WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
+      conn.query(sqlUpd, [novaQtd, idUsuario, idProduto], (err2) => {
+        if (err2) return res.status(500).json({ erro: err2.message });
+        res.sendStatus(200);
+      });
+    } else {
+      const sqlIns = `INSERT INTO carrinho (fk_ID_Usuario, fk_ID_Produto, Quantidade) VALUES (?, ?, ?)`;
+      conn.query(sqlIns, [idUsuario, idProduto, quantidade], (err3) => {
+        if (err3) return res.status(500).json({ erro: err3.message });
+        res.sendStatus(201);
+      });
+    }
+  });
+});
+
+// Remove produto do carrinho
+app.delete("/api/carrinho/:idUsuario/:idProduto", (req, res) => {
+  const { idUsuario, idProduto } = req.params;
+  const sql = `DELETE FROM carrinho WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
+  conn.query(sql, [idUsuario, idProduto], err => {
+    if (err) return res.status(500).json({ erro: err.message });
+    res.sendStatus(200);
+  });
+});
+
+
+

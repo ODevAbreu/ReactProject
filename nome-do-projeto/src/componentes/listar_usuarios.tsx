@@ -4,6 +4,7 @@ import Nav from './Nav';
 import usuarioService from "../service/UsuarioService";
 import { UsuarioModel } from "../model/Usuario.model";
 import "./ListarUsuario.styles.css";
+import Footer from "./Footer";
 
 const ListarUsuario: React.FC = () => {
     const [usuarios, setUsuarios] = useState<UsuarioModel[]>([]);
@@ -47,6 +48,8 @@ const ListarUsuario: React.FC = () => {
 
 
   return (
+    <>
+    <Nav />
     <div className="container-listagem">
       <h1 className="titulo-principal">
         Usuários Cadastrados
@@ -107,6 +110,8 @@ const ListarUsuario: React.FC = () => {
         </table>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

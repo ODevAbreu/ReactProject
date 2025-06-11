@@ -58,6 +58,11 @@ const Nav: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/Carrinho" className="text-decoration-none">
+                  Carrinho
+                </Link>
+              </li>
+              <li>
                 <button className="btn btn-sm btn-danger" onClick={Deslogar}>
                   Sair
                 </button>
