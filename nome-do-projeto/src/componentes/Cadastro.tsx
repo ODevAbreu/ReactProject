@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import usuarioService from "../service/UsuarioService";
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
 const Cadastro: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -13,22 +14,22 @@ const Cadastro: React.FC = () => {
   const [telefone, setTelefone] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
 
-  const {id} = useParams();
+  const { id } = useParams();
 
-  useEffect(() => {        
+  useEffect(() => {
     if (id) {
-        usuarioService.buscarPorId(id).then(usuario => {
-            console.log(usuario)
-            setNome(usuario.nome);
-            setEmail(usuario.email);
-            setSenha(usuario.senha);
-            setCpf(usuario.cpf);
-            setTelefone(usuario.telefone);
-            setDataNascimento(usuario.Dt_Nasc);
-        });
+      usuarioService.buscarPorId(id).then(usuario => {
+        console.log(usuario)
+        setNome(usuario.nome);
+        setEmail(usuario.email);
+        setSenha(usuario.senha);
+        setCpf(usuario.cpf);
+        setTelefone(usuario.telefone);
+        setDataNascimento(usuario.Dt_Nasc);
+      });
     } else {
-        console.log('id não encontrado');
-    }        
+      console.log('id não encontrado');
+    }
   }, [id]);
 
   const salvar = () => {
@@ -39,9 +40,9 @@ const Cadastro: React.FC = () => {
     console.log(cpf)
     console.log(telefone)
     console.log(dataNascimento)
-    
+
     usuarioService.salvar({
-      id: id,  
+      id: id,
       nome: nome,
       email: email,
       senha: senha,
@@ -49,7 +50,23 @@ const Cadastro: React.FC = () => {
       telefone: telefone,
       Dt_Nasc: dataNascimento
     }).then(result => {
-      navigate('/login'); 
+      if (result.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Cadastro bem-sucedido',
+          text: result.message || 'Cadastro realizado com sucesso.',
+        });
+
+      navigate('/login');
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: result.erro || 'E-mail ou senha inválidos.',
+        });
+      }
+
+
       console.log(result);
     }).catch(error => {
       console.log(error);
@@ -109,8 +126,8 @@ const Cadastro: React.FC = () => {
                           className="form-control"
                           placeholder="Digite sua senha"
                           value={senha}
-                          {...register("senha", { 
-                            required: true, 
+                          {...register("senha", {
+                            required: true,
                             minLength: 8,
                             pattern: /^(?=.*[A-Z])(?=.*\d).+$/
                           })}

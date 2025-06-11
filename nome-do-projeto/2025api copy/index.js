@@ -17,7 +17,7 @@ app.use('/uploads', express.static('uploads'));
 const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "PUC@1234",
+    password: "",
     database: "coffee",
     port: "3306"
 });
@@ -112,8 +112,8 @@ app.post('/api/usuario', (req, res) => {
         ('${usuario.nome}', '${usuario.email}', '${usuario.senha}', '${usuario.Dt_Nasc}',
         '${usuario.telefone}', '${usuario.cpf}')`;
     conn.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ message: "erro de inserção" , erro: err.message });
-        res.status(201).json({ id: result.insertId, ...usuario });
+        if (err) return res.status(500).json({success: false, message: "erro de inserção" , erro: err.message });
+        res.status(201).json({ success: true, id: result.insertId, ...usuario });
     });
 });
 
