@@ -3,8 +3,9 @@ import Swal from "sweetalert2";
 import Inputmask from "inputmask";
 import { useParams } from "react-router-dom";
 import enderecoService from "../service/EnderecoService";
-
+import { useNavigate } from "react-router-dom";
 const EditarEndereco = () => {
+  const navigate = useNavigate();
   const [cep, setCep] = useState('');
   const [rua, setRua] = useState('');
   const [numero, setNumero] = useState('');
@@ -85,7 +86,11 @@ const EditarEndereco = () => {
           icon: "success",
           title: "Sucesso!",
           text: "Endereço atualizado com sucesso!"
-        });
+        }).then((result) => {
+            if (result.isConfirmed) {
+              navigate("/carrinho");
+            }
+          });
       })
       .catch((err) => {
         console.error(err);

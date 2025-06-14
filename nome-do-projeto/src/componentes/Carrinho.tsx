@@ -108,7 +108,6 @@ const Carrinho: React.FC = () => {
       await enderecoService.excluir(id)
       .then((result) => {
         console.log("Endereço excluído com sucesso:", result);
-
         if (result.success) {
           Swal.fire("Sucesso", "Endereço excluído com sucesso!", "success");
           carregarEnderecos(idUsuario!);
@@ -116,8 +115,6 @@ const Carrinho: React.FC = () => {
           Swal.fire("Erro", "Falha ao excluir endereço", "error");
         }
       })
-  
-      // carregarEnderecos(idUsuario!); 
     } catch (error) {
       console.error("Erro ao excluir endereço:", error);
       Swal.fire("Erro", "Falha ao excluir endereço", "error");
@@ -242,7 +239,7 @@ const Carrinho: React.FC = () => {
                       {endereco.Rua || endereco.rua}, {endereco.Numero || endereco.numero} - {endereco.Bairro || endereco.bairro}, {endereco.Cidade || endereco.cidade} - CEP: {endereco.CEP || endereco.cep}
                     </label>
                     <a 
-                      href={`/editar_endereco/${endereco.ID_Endereco || endereco.id}`} 
+                      href={`/editarendereco/${endereco.ID_Endereco || endereco.id}`} 
                       className="btn btn-link text-decoration-none"
                     >
                       Editar
