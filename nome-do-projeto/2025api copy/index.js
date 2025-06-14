@@ -39,7 +39,7 @@ const Autenticar = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     // console.log(token)
     if (!token) {
-      return res.status(401).json({ error: 'Token não fornecido' });
+      return res.status(401).json({success: false, error: 'Token não fornecido' });
     }
     try {
       //verica se o token foi gerado por este servidor
@@ -48,7 +48,7 @@ const Autenticar = (req, res, next) => {
       req.userId = tokenValidado.id;
       next();
     } catch (err) {
-      res.status(401).json({ error: 'Token inválido' });
+      res.status(401).json({success: false, error: 'Token inválido' });
     }
 }
 

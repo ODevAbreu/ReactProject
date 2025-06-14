@@ -6,7 +6,7 @@ const salvar = async (produto?: ProdModel) => {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization":`Beurer ${token}`
+            "Authorization":`Bearer ${token}`
         },
         body: JSON.stringify(produto),
     })

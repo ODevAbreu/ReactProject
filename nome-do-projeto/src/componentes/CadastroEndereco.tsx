@@ -88,12 +88,21 @@ const CadastroEndereco = () => {
       };
 
       enderecoService.salvar(endereco)
-        .then(() => {
+        .then((resultado) => {
+          if( !resultado || !resultado.success) {
+            Swal.fire({
+              icon: "error",
+              title: "Erro ao cadastrar",
+              text: resultado.error || "Não foi possível salvar o endereço."
+            });
+            return;
+          }
           Swal.fire({
             icon: "success",
             title: "Sucesso!",
             text: "Endereço cadastrado com sucesso!"
           }).then((result) => {
+            console.log(result)
             if (result.isConfirmed) {
               navigate("/carrinho");
             }

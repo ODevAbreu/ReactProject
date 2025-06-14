@@ -6,7 +6,7 @@ const salvar = async (endereco?: EnderecoModel) => {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization":`Beurer ${token}`
+            "Authorization":`Bearer ${token}`
         },
         body: JSON.stringify(endereco),
     }).then((response) => response.json());
