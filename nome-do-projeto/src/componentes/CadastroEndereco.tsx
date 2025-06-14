@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Inputmask from "inputmask";
 import enderecoService from "../service/EnderecoService";
-
+import { useNavigate } from "react-router-dom";
 
 const CadastroEndereco = () => {
+  const navigate = useNavigate();
   const [cep, setCep] = useState('');
   const [rua, setRua] = useState('');
   const [numero, setNumero] = useState('');
@@ -25,7 +26,9 @@ const CadastroEndereco = () => {
   }, []);
 
   const buscarCep = () => {
+    console.log("Buscando CEP:", cep);	
     const cepLimpo = cep.replace("-", "");
+    console.log(cepLimpo);
     if (cepLimpo.length !== 8) {
       Swal.fire({
         icon: "warning",
@@ -90,6 +93,10 @@ const CadastroEndereco = () => {
             icon: "success",
             title: "Sucesso!",
             text: "Endereço cadastrado com sucesso!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate("/carrinho");
+            }
           });
         })
         .catch((err) => {
@@ -123,6 +130,7 @@ const CadastroEndereco = () => {
                       placeholder="00000-000"
                       value={cep}
                       onChange={(e) => setCep(e.target.value)}
+                      autoComplete="off"
                       onBlur={buscarCep} // <- AQUI está o segredo
                     />
                   </div>

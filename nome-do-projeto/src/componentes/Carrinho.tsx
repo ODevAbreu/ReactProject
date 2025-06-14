@@ -103,7 +103,26 @@ const Carrinho: React.FC = () => {
       Swal.fire("Erro", "Falha ao remover produto", "error");
     }
   };
+  const ExcluirEndereco = async (id: number) => {
+    try {
+      await enderecoService.excluir(id)
+      .then((result) => {
+        console.log("Endereço excluído com sucesso:", result);
 
+        if (result.success) {
+          Swal.fire("Sucesso", "Endereço excluído com sucesso!", "success");
+          carregarEnderecos(idUsuario!);
+        } else {
+          Swal.fire("Erro", "Falha ao excluir endereço", "error");
+        }
+      })
+  
+      // carregarEnderecos(idUsuario!); 
+    } catch (error) {
+      console.error("Erro ao excluir endereço:", error);
+      Swal.fire("Erro", "Falha ao excluir endereço", "error");
+    }
+  }	
   const confirmarExclusaoEndereco = (id: number) => {
     Swal.fire({
       title: "Tem certeza?",
@@ -116,8 +135,7 @@ const Carrinho: React.FC = () => {
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        // Implemente a função para excluir endereço
-        // window.location.href = `./endereco_excluir/${id}`;
+       ExcluirEndereco(id);
       }
     });
   };
@@ -242,7 +260,7 @@ const Carrinho: React.FC = () => {
 
             <div className="text-end mb-3">
               <a 
-                href="/cadastrar_endereco" 
+                href="/CadastroEndereco" 
                 className="btn btn-success w-100 mt-3" 
                 style={{ backgroundColor: '#624839', color: '#f5f5dc' }}
               >
