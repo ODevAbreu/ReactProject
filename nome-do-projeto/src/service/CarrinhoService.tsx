@@ -21,25 +21,27 @@ const adicionar = async (idUsuario: number, idProduto: number, quantidade: numbe
     }).then((response) => response.json());
 };
 
-const atualizarQuantidade = async (idUsuario: number, idProduto: number, quantidade: number) => {
+const atualizarQuantidade = async (ID_Compra: number, idProduto: number, quantidade: number) => {
     const token = localStorage.getItem("token");
-    return await fetch(`http://localhost:8080/api/carrinho/${idUsuario}/atualizar/${idProduto}`, {
-        method: "POST",
+    return await fetch(`http://localhost:8080/api/carrinho/atualizar/`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ qtd: quantidade }),
+        body: JSON.stringify({ ID_Compra: ID_Compra, idProduto: idProduto, Qtn_Produto: quantidade }),
     }).then((response) => response.json());
 };
 
-const remover = async (idUsuario: number, idProduto: number) => {
+const remover = async (idProduto: number,ID_Compra: number) => {
     const token = localStorage.getItem("token");
-    return await fetch(`http://localhost:8080/api/carrinho/${idUsuario}/${idProduto}`, {
+    return await fetch(`http://localhost:8080/api/carrinho/`, {
         method: "DELETE",
         headers: {
+            "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
+        body: JSON.stringify({ ID_Compra: ID_Compra, idProduto: idProduto }),
     }).then((response) => response.json());
 };
 

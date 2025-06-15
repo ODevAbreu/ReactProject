@@ -63,6 +63,7 @@ const carregarCarrinho = async (userId: number) => {
     
     const produtosMapeados = Array.isArray(carrinho)
       ? carrinho.map((prod: any) => ({
+          id_compra: prod.ID_Compra,
           id: prod.ID_Produto,
           nome: prod.Nome_Produto,
           descr: prod.Descr_Produto,
@@ -93,11 +94,10 @@ const carregarCarrinho = async (userId: number) => {
     }
   };
 
-  const atualizarQuantidade = async (idProduto: number, novaQtd: number) => {
+  const atualizarQuantidade = async (ID_Compra: any,idProduto: number, novaQtd: number) => {
     if (!idUsuario || novaQtd < 1) return;
-    
     try {
-      await CarrinhoService.atualizarQuantidade(idUsuario, idProduto, novaQtd);
+      await CarrinhoService.atualizarQuantidade(ID_Compra, idProduto, novaQtd);
       carregarCarrinho(idUsuario);
     } catch (error) {
       console.error("Erro ao atualizar quantidade:", error);
@@ -105,11 +105,11 @@ const carregarCarrinho = async (userId: number) => {
     }
   };
 
-  const removerProduto = async (idProduto: number) => {
+  const removerProduto = async (idProduto: number,Id_Compra: number) => {
     if (!idUsuario) return;
     
     try {
-      await CarrinhoService.remover(idUsuario, idProduto);
+      await CarrinhoService.remover(idProduto,Id_Compra);
       carregarCarrinho(idUsuario);
       Swal.fire("Sucesso", "Produto removido do carrinho", "success");
     } catch (error) {
@@ -203,7 +203,7 @@ const carregarCarrinho = async (userId: number) => {
                   <div className="col-md-2 text-center">
                     <button
                       className="btn btn-outline-secondary btn-sm"
-                      onClick={() => atualizarQuantidade(produto.id, produto.qtd - 1)}
+                      onClick={() => atualizarQuantidade(produto.id_compra,produto.id, produto.qtd - 1)}
                       disabled={produto.qtd <= 1}
                       title={produto.qtd <= 1 ? "Quantidade mínima é de 1" : ""}
                     >
@@ -212,7 +212,7 @@ const carregarCarrinho = async (userId: number) => {
                     <span className="mx-2">{produto.qtd}</span>
                     <button
                       className="btn btn-outline-secondary btn-sm"
-                      onClick={() => atualizarQuantidade(produto.id, produto.qtd + 1)}
+                      onClick={() => atualizarQuantidade(produto.id_compra,produto.id, produto.qtd + 1)}
                     >
                       +
                     </button>
@@ -221,7 +221,7 @@ const carregarCarrinho = async (userId: number) => {
                     <p className="fw-bold">R$ {produto.preco}</p>
                     <button 
                       className="btn btn-danger btn-sm"
-                      onClick={() => removerProduto(produto.id)}
+                      onClick={() => removerProduto(produto.id, produto.id_compra)}
                     >
                       Remover
                     </button>

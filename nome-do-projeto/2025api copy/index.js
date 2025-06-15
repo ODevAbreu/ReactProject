@@ -279,6 +279,7 @@ app.get("/api/carrinho/:idUsuario", (req, res) => {
   const idUsuario = req.params.idUsuario;
   
   const sql = `SELECT
+                c.ID_Compra,
                 p.ID_Produto,
                 p.Nome_Produto,
                 p.Descr_Produto,
@@ -303,7 +304,7 @@ app.get("/api/carrinho/:idUsuario", (req, res) => {
     if (err) return res.status(500).json([]); // Retorna array vazio em caso de erro
     // Retorna o resultado (que pode ser array vazio)
     res.status(200).json(result || []); 
-    console.log(result);
+    // console.log(result);
   });
 });
 
@@ -376,14 +377,24 @@ app.post("/api/carrinho/adicionar", (req, res) => {
     });
 });
 
+app.put("/api/carrinho/atualizar", Autenticar, (req, res) => {
+  const { ID_Compra, idProduto, Qtn_Produto } = req.body;
+  const sql = `UPDATE QTD_Produto SET Qtn_Produto = ? WHERE fk_Compra_ID_Compra = ? AND fk_Produto_ID_Produto = ?`;
+  conn.query(sql, [Qtn_Produto, ID_Compra, idProduto], (err, result) => {
+    if (err) return res.status(500).json({ erro: err.message });
+    res.status(200).json({ success: true, message: "Quantidade atualizada com sucesso" });
+  });
+});
 
 // Remove produto do carrinho
-app.delete("/api/carrinho/:idUsuario/:idProduto", (req, res) => {
-  const { idUsuario, idProduto } = req.params;
-  const sql = `DELETE FROM compra WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
-  conn.query(sql, [idUsuario, idProduto], err => {
+app.delete("/api/carrinho/", Autenticar, (req, res) => {
+  ID_Compra = req.body.ID_Compra;
+  ID_Produto = req.body.idProduto;
+  const sql = `DELETE FROM QTD_Produto WHERE fk_Compra_ID_Compra = ? AND fk_Produto_ID_Produto = ?`;
+  conn.query(sql, [ID_Compra, ID_Produto], (err, result) => {
     if (err) return res.status(500).json({ erro: err.message });
-    res.sendStatus(200);
+    console.log(result)
+    res.status(200).json({ success: true, message: "Produto removido do carrinho com sucesso" });
   });
 });
 
