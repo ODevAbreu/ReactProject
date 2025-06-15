@@ -157,7 +157,7 @@ app.post('/api/produto', Autenticar, (req, res) => {
     }
 });
 
-app.delete('/api/produto/:id', (req, res) => {
+app.delete('/api/produto/:id', Autenticar, (req, res) => {
     const id = req.params.id;
     const sql = "DELETE FROM produto WHERE ID_Produto = ?";
     conn.query(sql, [id], (err, result) => {
@@ -220,7 +220,7 @@ app.post('/api/endereco',Autenticar, (req, res) => {
 
 
 
-app.put('/api/endereco/:id', (req, res) => {
+app.put('/api/endereco/:id',Autenticar, (req, res) => {
   const id = req.params.id;
   const { Rua, Numero, Cidade, CEP, Bairro } = req.body;
 
@@ -230,9 +230,9 @@ app.put('/api/endereco/:id', (req, res) => {
     WHERE ID_Endereco = ?`;
 
   conn.query(sql, [Rua, Numero, Cidade, CEP, Bairro, id], (err, result) => {
-    if (err) return res.status(500).json({ message: "Erro ao atualizar", erro: err.message });
+    if (err) return res.status(500).json({ sucesses:false, message: "Erro ao atualizar", erro: err.message });
 
-    res.status(200).json({ message: "Endereço atualizado com sucesso" });
+    res.status(200).json({ success:true, message: "Endereço atualizado com sucesso" });
   });
 });
 
@@ -261,7 +261,7 @@ app.get("/api/endereco/usuario/:id", (req, res) => {
   });
 });
 
-app.delete('/api/endereco/:id', (req, res) => {
+app.delete('/api/endereco/:id', Autenticar, (req, res) => {
   const id = req.params.id;
   const sql = 'DELETE FROM endereco WHERE ID_Endereco = ?';
   conn.query(sql, [id], (err, result) => {

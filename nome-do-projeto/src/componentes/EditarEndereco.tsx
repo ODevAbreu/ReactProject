@@ -80,8 +80,17 @@ const EditarEndereco = () => {
     };
 
     enderecoService.atualizar(Number(id), enderecoAtualizado)
-      .then(() => {
-        sessionStorage.setItem("enderecoAtualizado", "true");
+      .then((resultado) => {
+        console.log(resultado);
+        if (!resultado.success) {
+          Swal.fire({
+            icon: "error",
+            title: "Erro ao atualizar",
+             html: "<small>Realize o login novamente.</small>",
+            text: resultado.error || "Não foi possível atualizar o endereço."
+          });
+          return;
+        }else{
         Swal.fire({
           icon: "success",
           title: "Sucesso!",
@@ -91,6 +100,7 @@ const EditarEndereco = () => {
               navigate("/carrinho");
             }
           });
+        }
       })
       .catch((err) => {
         console.error(err);

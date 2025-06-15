@@ -13,10 +13,12 @@ const salvar = async (endereco?: EnderecoModel) => {
 };
 
 const atualizar = async (id: number, endereco: EnderecoModel) => {
+    const token = localStorage.getItem("token");
     return await fetch(`http://localhost:8080/api/endereco/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
+            "Authorization":`Bearer ${token}`
         },
         body: JSON.stringify(endereco),
     }).then((response) => response.json());

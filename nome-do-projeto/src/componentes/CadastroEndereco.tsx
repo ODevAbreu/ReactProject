@@ -4,8 +4,7 @@ import Inputmask from "inputmask";
 import enderecoService from "../service/EnderecoService";
 import { useNavigate } from "react-router-dom";
 
-const CadastroEndereco = () => {
-  const navigate = useNavigate();
+const CadastroEndereco = () => {  const navigate = useNavigate();
   const [cep, setCep] = useState('');
   const [rua, setRua] = useState('');
   const [numero, setNumero] = useState('');
@@ -15,14 +14,14 @@ const CadastroEndereco = () => {
   useEffect(() => {
     Inputmask("99999-999").mask(document.getElementById("cep") as HTMLInputElement);
 
-    if (sessionStorage.getItem("enderecoAtualizado") === "true") {
-      Swal.fire({
-        icon: "success",
-        title: "Sucesso!",
-        text: "Endereço atualizado com sucesso!"
-      });
-      sessionStorage.removeItem("enderecoAtualizado");
-    }
+    // if (sessionStorage.getItem("enderecoAtualizado") === "true") {
+    //   Swal.fire({
+    //     icon: "success",
+    //     title: "Sucesso!",
+    //     text: "Endereço atualizado com sucesso!"
+    //   });
+    //   sessionStorage.removeItem("enderecoAtualizado");
+    // }
   }, []);
 
   const buscarCep = () => {
@@ -96,7 +95,7 @@ const CadastroEndereco = () => {
               text: resultado.error || "Não foi possível salvar o endereço."
             });
             return;
-          }
+          }else {
           Swal.fire({
             icon: "success",
             title: "Sucesso!",
@@ -107,6 +106,7 @@ const CadastroEndereco = () => {
               navigate("/carrinho");
             }
           });
+        }
         })
         .catch((err) => {
           console.error(err);
@@ -116,6 +116,17 @@ const CadastroEndereco = () => {
             text: "Não foi possível salvar o endereço."
           });
         });
+    }else{
+        Swal.fire({
+          icon: "warning",
+          title: "Erro",
+          text: "Usuário não identificado. Faça login novamente."
+        }).then((result) => {
+          if (result.isConfirmed){
+          navigate("/login");
+          }
+        })
+        return;
     }
   };
 
