@@ -153,19 +153,26 @@ const carregarCarrinho = async (userId: number) => {
     });
   };
 
-  const finalizarCompra = async () => {
+  const finalizarCompra = async (ID_Compra: any) => {
     if (!idUsuario || !idEndereco) {
       Swal.fire("Atenção", "Selecione um endereço de entrega", "warning");
       return;
     }
 
     try {
-      // Implemente seu serviço de finalização de compra
-      // await CarrinhoService.finalizarCompra(idUsuario, idEndereco, pagamento);
+      await CarrinhoService.finalizar(ID_Compra, idEndereco, pagamento, idUsuario)
+      .then((result) => {
+        console.log("Compra finalizada:", result);
+        if (!result.success) {
+          Swal.fire("Erro", result.message || "Falha ao finalizar compra", "error");
+          return;
+        }else {
+          Swal.fire("Sucesso", "Compra finalizada com sucesso!", "success");
+        setProdutos([]);
+        }
+      })
       
-      Swal.fire("Sucesso", "Compra finalizada com sucesso!", "success");
-      setProdutos([]);
-      navigate("/pedidos");
+      
     } catch (error) {
       console.error("Erro ao finalizar compra:", error);
       Swal.fire("Erro", "Falha ao finalizar compra", "error");
@@ -303,7 +310,7 @@ const carregarCarrinho = async (userId: number) => {
                 type="button" 
                 className="btn btn-success w-100 mt-3" 
                 style={{ backgroundColor: '#4a3428', color: '#f5f5dc' }}
-                onClick={finalizarCompra}
+                onClick={() => finalizarCompra(produtos[0]?.id_compra)}
               >
                 Finalizar Compra
               </button>

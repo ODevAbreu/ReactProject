@@ -45,11 +45,23 @@ const remover = async (idProduto: number,ID_Compra: number) => {
     }).then((response) => response.json());
 };
 
+const finalizar = async (ID_Compra: number,idEndereco: any,pagamento: any, idUsuario:any) => {
+    const token = localStorage.getItem("token");
+    return await fetch(`http://localhost:8080/api/carrinho/finalizar`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ ID_Compra: ID_Compra, idEndereco: idEndereco, pagamento: pagamento,idUsuario:idUsuario }),
+    }).then((response) => response.json());
+};
 const CarrinhoService = {
     listar,
     adicionar,
     atualizarQuantidade,
-    remover
+    remover,
+    finalizar
 };
 
 export default CarrinhoService;

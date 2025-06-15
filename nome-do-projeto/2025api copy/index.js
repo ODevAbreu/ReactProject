@@ -28,7 +28,7 @@ conn.connect(function (err) {
 });
 
 const gerarToken = (id, email) => {
-     return jwt.sign({ id: id, email: email, permissoes: ['USUARIO','PRODUTO'] }, 'cafezera', {
+    return jwt.sign({ id: id, email: email, permissoes: ['USUARIO', 'PRODUTO'] }, 'cafezera', {
         expiresIn: '1h'
     });
 }
@@ -39,16 +39,16 @@ const Autenticar = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     // console.log(token)
     if (!token) {
-      return res.status(401).json({success: false, error: 'Token não fornecido' });
+        return res.status(401).json({ success: false, error: 'Token não fornecido' });
     }
     try {
-      //verica se o token foi gerado por este servidor
-      //validando a palavra chave
-      const tokenValidado = validarToken(token);
-      req.userId = tokenValidado.id;
-      next();
+        //verica se o token foi gerado por este servidor
+        //validando a palavra chave
+        const tokenValidado = validarToken(token);
+        req.userId = tokenValidado.id;
+        next();
     } catch (err) {
-      res.status(401).json({success: false, error: 'Token inválido' });
+        res.status(401).json({ success: false, error: 'Token inválido' });
     }
 }
 
@@ -79,7 +79,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
         return res.status(400).json({ error: 'Nenhum arquivo enviado' });
     }
     const imagePath = `/uploads/${req.file.filename}`;
-    res.status(200).json({ path: imagePath });  
+    res.status(200).json({ path: imagePath });
 });
 
 
@@ -112,7 +112,7 @@ app.post('/api/usuario', (req, res) => {
         ('${usuario.nome}', '${usuario.email}', '${usuario.senha}', '${usuario.Dt_Nasc}',
         '${usuario.telefone}', '${usuario.cpf}')`;
     conn.query(sql, (err, result) => {
-        if (err) return res.status(500).json({success: false, message: "erro de inserção" , erro: err.message });
+        if (err) return res.status(500).json({ success: false, message: "erro de inserção", erro: err.message });
         res.status(201).json({ success: true, id: result.insertId, ...usuario });
     });
 });
@@ -137,7 +137,7 @@ app.get('/api/produto', (req, res) => {
 
 app.post('/api/produto', Autenticar, (req, res) => {
     const produto = req.body;
-    
+
     if (produto.id) {
         const sql = "UPDATE produto SET Nome_Produto = ?, Descr_Produto = ?, Tipo_prod = ?, Preco_prod = ?, Qtn_Produto = ?, imagem_prod = ? WHERE ID_Produto = ?";
         conn.query(sql, [produto.nome, produto.descr, produto.tipo, produto.preco, produto.qtd, produto.imagem, produto.id], (err, result) => {
@@ -191,7 +191,7 @@ app.post("/usuario/login", (req, res) => {
 
         if (results.length > 0) {
             const token = gerarToken(results[0].Id, results[0].Email);
-            res.json({success: true,token: token, usuario: results[0] });
+            res.json({ success: true, token: token, usuario: results[0] });
             // res.json({ success: true, usuario: results[0] });
 
         } else {
@@ -207,68 +207,68 @@ app.listen(PORT, (err) => {
 
 // Rotas Do Endereço 
 
-app.post('/api/endereco',Autenticar, (req, res) => {
+app.post('/api/endereco', Autenticar, (req, res) => {
     const endereco = req.body;
     const sql = `INSERT INTO endereco (Rua,Numero,Cidade,CEP,Bairro,fk_ID_Usuario) VALUES 
         ('${endereco.Rua}', '${endereco.Numero}', '${endereco.Cidade}', '${endereco.CEP}',
-        '${endereco.Bairro}', '${ endereco.fk_ID_Usuario}')`;
+        '${endereco.Bairro}', '${endereco.fk_ID_Usuario}')`;
     conn.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ message: "erro de inserção" , erro: err.message });
+        if (err) return res.status(500).json({ message: "erro de inserção", erro: err.message });
         res.status(201).json({ id: result.insertId, ...endereco });
     });
 });
 
 
 
-app.put('/api/endereco/:id',Autenticar, (req, res) => {
-  const id = req.params.id;
-  const { Rua, Numero, Cidade, CEP, Bairro } = req.body;
+app.put('/api/endereco/:id', Autenticar, (req, res) => {
+    const id = req.params.id;
+    const { Rua, Numero, Cidade, CEP, Bairro } = req.body;
 
-  const sql = `
+    const sql = `
     UPDATE endereco
     SET Rua = ?, Numero = ?, Cidade = ?, CEP = ?, Bairro = ?
     WHERE ID_Endereco = ?`;
 
-  conn.query(sql, [Rua, Numero, Cidade, CEP, Bairro, id], (err, result) => {
-    if (err) return res.status(500).json({ sucesses:false, message: "Erro ao atualizar", erro: err.message });
+    conn.query(sql, [Rua, Numero, Cidade, CEP, Bairro, id], (err, result) => {
+        if (err) return res.status(500).json({ sucesses: false, message: "Erro ao atualizar", erro: err.message });
 
-    res.status(200).json({ success:true, message: "Endereço atualizado com sucesso" });
-  });
+        res.status(200).json({ success: true, message: "Endereço atualizado com sucesso" });
+    });
 });
 
 app.get('/api/endereco/:id', (req, res) => {
-  const id = req.params.id;
-  const sql = 'SELECT * FROM endereco WHERE ID_Endereco = ?';
+    const id = req.params.id;
+    const sql = 'SELECT * FROM endereco WHERE ID_Endereco = ?';
 
-  conn.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).json({ message: "Erro ao buscar", erro: err.message });
-    if (result.length === 0) return res.status(404).json({ message: "Endereço não encontrado" });
-    res.status(200).json(result[0]);
-  });
+    conn.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json({ message: "Erro ao buscar", erro: err.message });
+        if (result.length === 0) return res.status(404).json({ message: "Endereço não encontrado" });
+        res.status(200).json(result[0]);
+    });
 });
 
 app.get("/api/endereco/usuario/:id", (req, res) => {
-  const userId = req.params.id;
-  const sql = "SELECT * FROM endereco WHERE fk_ID_Usuario = ?";
+    const userId = req.params.id;
+    const sql = "SELECT * FROM endereco WHERE fk_ID_Usuario = ?";
 
-  conn.query(sql, [userId], (err, results) => {
-    if (err) {
-      console.error("Erro ao buscar endereços do usuário:", err);
-      return res.status(500).json({ erro: "Erro ao buscar endereços" });
-    }
+    conn.query(sql, [userId], (err, results) => {
+        if (err) {
+            console.error("Erro ao buscar endereços do usuário:", err);
+            return res.status(500).json({ erro: "Erro ao buscar endereços" });
+        }
 
-    res.json(results); 
-  });
+        res.json(results);
+    });
 });
 
 app.delete('/api/endereco/:id', Autenticar, (req, res) => {
-  const id = req.params.id;
-  const sql = 'DELETE FROM endereco WHERE ID_Endereco = ?';
-  conn.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).json({success: false, message: "Erro ao excluir", erro: err.message });
-    if (result.affectedRows === 0) return res.status(404).json({ message: "Endereço não encontrado" });
-    res.status(200).json({ success: true, message: "Endereço excluído com sucesso" });
-  });
+    const id = req.params.id;
+    const sql = 'DELETE FROM endereco WHERE ID_Endereco = ?';
+    conn.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json({ success: false, message: "Erro ao excluir", erro: err.message });
+        if (result.affectedRows === 0) return res.status(404).json({ message: "Endereço não encontrado" });
+        res.status(200).json({ success: true, message: "Endereço excluído com sucesso" });
+    });
 });
 
 
@@ -276,9 +276,9 @@ app.delete('/api/endereco/:id', Autenticar, (req, res) => {
 // Obtém carrinho do usuário
 app.get("/api/carrinho/:idUsuario", (req, res) => {
 
-  const idUsuario = req.params.idUsuario;
-  
-  const sql = `SELECT
+    const idUsuario = req.params.idUsuario;
+
+    const sql = `SELECT
                 c.ID_Compra,
                 p.ID_Produto,
                 p.Nome_Produto,
@@ -300,23 +300,23 @@ app.get("/api/carrinho/:idUsuario", (req, res) => {
 
 
 
-  conn.query(sql, [idUsuario], (err, result) => {
-    if (err) return res.status(500).json([]); // Retorna array vazio em caso de erro
-    // Retorna o resultado (que pode ser array vazio)
-    res.status(200).json(result || []); 
-    // console.log(result);
-  });
+    conn.query(sql, [idUsuario], (err, result) => {
+        if (err) return res.status(500).json([]); // Retorna array vazio em caso de erro
+        // Retorna o resultado (que pode ser array vazio)
+        res.status(200).json(result || []);
+        // console.log(result);
+    });
 });
 
 // Atualiza quantidade de um produto no carrinho
 app.post("/api/carrinho/:idUsuario/atualizar/:idProduto", (req, res) => {
-  const { idUsuario, idProduto } = req.params;
-  const { qtd } = req.body;
-  const sql = `UPDATE compra SET Quantidade = ? WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
-  conn.query(sql, [qtd, idUsuario, idProduto], (err) => {
-    if (err) return res.status(500).json({ erro: err.message });
-    res.sendStatus(200);
-  });
+    const { idUsuario, idProduto } = req.params;
+    const { qtd } = req.body;
+    const sql = `UPDATE compra SET Quantidade = ? WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
+    conn.query(sql, [qtd, idUsuario, idProduto], (err) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.sendStatus(200);
+    });
 });
 
 app.post("/api/carrinho/adicionar", (req, res) => {
@@ -377,25 +377,121 @@ app.post("/api/carrinho/adicionar", (req, res) => {
     });
 });
 
+app.post("/api/carrinho/finalizar", Autenticar, (req, res) => {
+    const { ID_Compra, idEndereco, pagamento,  idUsuario } = req.body;
+    // console.log("req",req.body)
+    // 1. Busca os dados do endereço
+    const sqlEndereco = `
+        SELECT Rua, Numero, Bairro, Cidade, CEP
+        FROM endereco
+        WHERE ID_Endereco = ?
+    `;
+    conn.query(sqlEndereco, [idEndereco], (err, enderecoResult) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        if (!enderecoResult || enderecoResult.length === 0)
+            return res.status(404).json({ success: false, message: "Endereço não encontrado" });
+        const endereco = enderecoResult[0];
+        
+        // 2. Busca os produtos do carrinho e seus estoques
+        const sqlProdutos = `
+            SELECT p.ID_Produto, p.Qtn_Produto AS estoque_atual, qp.Qtn_Produto AS qtd_solicitada, p.Nome_Produto
+            FROM produto p
+            JOIN qtd_produto qp ON p.ID_Produto = qp.fk_Produto_ID_Produto
+            WHERE qp.fk_Compra_ID_Compra = ?
+            and p.Qtn_Produto > 0
+        `;
+        conn.query(sqlProdutos, [ID_Compra], (err2, produtos) => {
+            if (err2) return res.status(500).json({ erro: err2.message });
+            
+
+            // 3. Valida estoque
+            const insuficiente = produtos.find(produto => produto.qtd_solicitada > produto.estoque_atual);
+
+            if (insuficiente) {
+                console.log("insuficiente",insuficiente)
+                return res.status(400).json({
+                    success: false,
+                    message: `Produto '${insuficiente.Nome_Produto}' possui apenas ${insuficiente.estoque_atual} unidades em estoque, mas você solicitou ${insuficiente.qtd_solicitada}.`
+                });
+            }
+
+            // 4. Atualiza a compra com dados do endereço e pagamento
+            const dataAtual = new Date();
+            const dataFormatada = dataAtual.toISOString().slice(0, 19).replace('T', ' ');
+
+            const sqlUpdateCompra = `
+                UPDATE compra
+                SET 
+                    Status = 'fechada',
+                    Data_Compra = ?,
+                    Forma_Pagamento = ?,
+                    Rua_entrega = ?,
+                    Numero_entrega = ?,
+                    Bairro_entrega = ?,
+                    Cidade_entrega = ?,
+                    CEP_entrega = ?
+                WHERE ID_Compra = ? AND ID_Usuario = ?
+            `;
+            conn.query(sqlUpdateCompra, [
+                dataFormatada,
+                pagamento,
+                endereco.Rua,
+                endereco.Numero,
+                endereco.Bairro,
+                endereco.Cidade,
+                endereco.CEP,
+                ID_Compra,
+                idUsuario
+            ], (err3, resultCompra) => {
+                if (err3) return res.status(500).json({ erro: err3.message });
+
+                // 5. Atualiza o estoque dos produtos
+                const sqlUpdateEstoque = `
+                    UPDATE produto
+                    SET Qtn_Produto = Qtn_Produto - (
+                        SELECT Qtn_Produto
+                        FROM qtd_produto
+                        WHERE qtd_produto.fk_Compra_ID_Compra = ? 
+                          AND qtd_produto.fk_Produto_ID_Produto = produto.ID_Produto
+                    )
+                    WHERE ID_Produto IN (
+                        SELECT fk_Produto_ID_Produto
+                        FROM qtd_produto
+                        WHERE fk_Compra_ID_Compra = ?
+                    )
+                `;
+                conn.query(sqlUpdateEstoque, [ID_Compra, ID_Compra], (err4) => {
+                    if (err4) return res.status(500).json({ erro: err4.message });
+
+                    res.status(200).json({ success: true, message: "Compra finalizada com sucesso" });
+                });
+            });
+        });
+    });
+});
+
+
+
+
 app.put("/api/carrinho/atualizar", Autenticar, (req, res) => {
-  const { ID_Compra, idProduto, Qtn_Produto } = req.body;
-  const sql = `UPDATE QTD_Produto SET Qtn_Produto = ? WHERE fk_Compra_ID_Compra = ? AND fk_Produto_ID_Produto = ?`;
-  conn.query(sql, [Qtn_Produto, ID_Compra, idProduto], (err, result) => {
-    if (err) return res.status(500).json({ erro: err.message });
-    res.status(200).json({ success: true, message: "Quantidade atualizada com sucesso" });
-  });
+    const { ID_Compra, idProduto, Qtn_Produto } = req.body;
+    const sql = `UPDATE QTD_Produto SET Qtn_Produto = ? WHERE fk_Compra_ID_Compra = ? AND fk_Produto_ID_Produto = ?`;
+    conn.query(sql, [Qtn_Produto, ID_Compra, idProduto], (err, result) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.status(200).json({ success: true, message: "Quantidade atualizada com sucesso" });
+    });
 });
 
 // Remove produto do carrinho
 app.delete("/api/carrinho/", Autenticar, (req, res) => {
-  ID_Compra = req.body.ID_Compra;
-  ID_Produto = req.body.idProduto;
-  const sql = `DELETE FROM QTD_Produto WHERE fk_Compra_ID_Compra = ? AND fk_Produto_ID_Produto = ?`;
-  conn.query(sql, [ID_Compra, ID_Produto], (err, result) => {
-    if (err) return res.status(500).json({ erro: err.message });
-    console.log(result)
-    res.status(200).json({ success: true, message: "Produto removido do carrinho com sucesso" });
-  });
+    ID_Compra = req.body.ID_Compra;
+    ID_Produto = req.body.idProduto;
+    const sql = `DELETE FROM QTD_Produto WHERE fk_Compra_ID_Compra = ? AND fk_Produto_ID_Produto = ?`;
+    conn.query(sql, [ID_Compra, ID_Produto], (err, result) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        console.log(result)
+        res.status(200).json({ success: true, message: "Produto removido do carrinho com sucesso" });
+    });
 });
 
 
