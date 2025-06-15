@@ -11,13 +11,13 @@ const listar = async (idUsuario: number): Promise<CarrinhoModel[]> => {
 
 const adicionar = async (idUsuario: number, idProduto: number, quantidade: number) => {
     const token = localStorage.getItem("token");
-    return await fetch(`http://localhost:8080/api/carrinho/${idUsuario}/adicionar`, {
+    return await fetch(`http://localhost:8080/api/carrinho/adicionar`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ idProduto, quantidade }),
+        body: JSON.stringify({ idUsuario,idProduto, quantidade }),
     }).then((response) => response.json());
 };
 

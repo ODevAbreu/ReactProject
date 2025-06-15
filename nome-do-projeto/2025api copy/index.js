@@ -275,6 +275,7 @@ app.delete('/api/endereco/:id', Autenticar, (req, res) => {
 
 // Obtém carrinho do usuário
 app.get("/api/carrinho/:idUsuario", (req, res) => {
+
   const idUsuario = req.params.idUsuario;
   
   const sql = `SELECT
@@ -283,7 +284,8 @@ app.get("/api/carrinho/:idUsuario", (req, res) => {
                 p.Descr_Produto,
                 p.Preco_prod,
                 p.Tipo_prod,
-                qp.Qtn_Produto
+                qp.Qtn_Produto,
+                p.imagem_prod
             FROM 
                 Produto p
             JOIN 
@@ -300,7 +302,8 @@ app.get("/api/carrinho/:idUsuario", (req, res) => {
   conn.query(sql, [idUsuario], (err, result) => {
     if (err) return res.status(500).json([]); // Retorna array vazio em caso de erro
     // Retorna o resultado (que pode ser array vazio)
-    res.status(200).json(result || []); // Garante que nunca retorne null/undefined
+    res.status(200).json(result || []); 
+    console.log(result);
   });
 });
 
@@ -315,43 +318,64 @@ app.post("/api/carrinho/:idUsuario/atualizar/:idProduto", (req, res) => {
   });
 });
 
+app.post("/api/carrinho/adicionar", (req, res) => {
+    const { idUsuario, idProduto } = req.body;
 
+    // 1. Busca uma compra ABERTA para o cliente
+    const sqlBuscaCompra = `
+        SELECT ID_Compra FROM Compra
+        WHERE ID_Usuario = ? AND Status = 'aberta'
+        ORDER BY ID_Compra DESC LIMIT 1
+    `;
+    conn.query(sqlBuscaCompra, [idUsuario], (err, rows) => {
+        if (err) return res.status(500).json({ erro: err.message });
 
-// Adiciona produto ao carrinho ou incrementa quantidade
-app.post("/api/carrinho/:idUsuario/adicionar", (req, res) => {
+        let idCompra;
+        if (rows.length > 0) {
+            // Já existe compra aberta
+            idCompra = rows[0].ID_Compra;
+            verificarProdutoNoCarrinho();
+        } else {
+            // Não existe compra aberta, cria uma nova
+            const sqlNovaCompra = `
+                INSERT INTO Compra (ID_Usuario, Status)
+                VALUES (?, 'aberta')
+            `;
+            conn.query(sqlNovaCompra, [idUsuario], (err2, result) => {
+                if (err2) return res.status(500).json({ erro: err2.message });
+                idCompra = result.insertId;
+                verificarProdutoNoCarrinho();
+            });
+        }
 
+        function verificarProdutoNoCarrinho() {
+            const sqlVerifica = `
+                SELECT * FROM QTD_Produto
+                WHERE fk_Compra_ID_Compra = ? AND fk_Produto_ID_Produto = ?
+            `;
+            conn.query(sqlVerifica, [idCompra, idProduto], (err4, result) => {
+                if (err4) return res.status(500).json({ erro: err4.message });
+                if (result.length > 0) {
+                    // Produto já está no carrinho
+                    return res.status(200).json({ success: false, message: "Produto já está no carrinho" });
+                }
+                inserirProdutoNoCarrinho();
+            });
+        }
 
-  // const sqlCheck = `SELECT Quantidade FROM compra WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
-  // conn.query(sqlCheck, [idUsuario, idProduto], (err, rows) => {
-
-
-
-
-  // const { idUsuario } = req.params;
-  // const { idProduto, quantidade } = req.body;
-  // const sqlCheck = `SELECT Quantidade FROM compra WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
-  // conn.query(sqlCheck, [idUsuario, idProduto], (err, rows) => {
-  //   if (err) return res.status(500).json({ erro: err.message });
-  //   if (rows.length > 0) {
-  //     const novaQtd = rows[0].Quantidade + quantidade;
-  //     const sqlUpd = `UPDATE compra SET Quantidade = ? WHERE fk_ID_Usuario = ? AND fk_ID_Produto = ?`;
-  //     conn.query(sqlUpd, [novaQtd, idUsuario, idProduto], (err2) => {
-  //       if (err2) return res.status(500).json({ erro: err2.message });
-  //       res.sendStatus(200);
-  //     });
-  //   } else {
-  //     const sqlIns = `INSERT INTO compra (fk_ID_Usuario, fk_ID_Produto, Quantidade) VALUES (?, ?, ?)`;
-  //     conn.query(sqlIns, [idUsuario, idProduto, quantidade], (err3) => {
-  //       if (err3) return res.status(500).json({ erro: err3.message });
-  //       res.sendStatus(201);
-  //     });
-  //   }
-  // });
-
-
-
-
+        function inserirProdutoNoCarrinho() {
+            const sqlProduto = `
+                INSERT INTO QTD_Produto (fk_Compra_ID_Compra, fk_Produto_ID_Produto, Qtn_Produto)
+                VALUES (?, ?, 1)
+            `;
+            conn.query(sqlProduto, [idCompra, idProduto], (err3) => {
+                if (err3) return res.status(500).json({ erro: err3.message });
+                res.status(200).json({ success: true, idCompra });
+            });
+        }
+    });
 });
+
 
 // Remove produto do carrinho
 app.delete("/api/carrinho/:idUsuario/:idProduto", (req, res) => {

@@ -5,15 +5,38 @@ import { ProdModel } from '../model/Prod.Model';
 import ProdService from '../service/ProdService';
 import './catalogo.css';
 import Footer from './Footer';
+import CarrinhoService from '../service/CarrinhoService';
+import Swal from 'sweetalert2';
 
 const Catalogo: React.FC = () => {
   let ADM = false
+  let ID_User = 0;
   const usuario = localStorage.getItem("usuario");
-  if(usuario){
-  const usuariojson = usuario ? JSON.parse(usuario) : null;
-  ADM = usuariojson.ADM;
-}
-
+  if (usuario) {
+    const usuariojson = usuario ? JSON.parse(usuario) : null;
+    ADM = usuariojson.ADM;
+    ID_User = usuariojson.Id;
+  }
+  const adicionarAoCarrinho = async (idProduto: number) => {
+    try {
+      if (ID_User > 0) {        
+        CarrinhoService.adicionar(ID_User, idProduto, 1,).then((result) => {
+          console.log("ID do usuário:", result);
+          if (result.success) {
+            Swal.fire("Sucesso", "Produto adicionado ao carrinho!", "success");
+          } else {
+            Swal.fire("Erro", result.message, "error");
+          }
+        })
+          ;
+      } else {
+        Swal.fire("Atenção", "Faça login para comprar!", "warning");
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar produto ao carrinho:", error);
+      Swal.fire("Erro", "Ocorreu um erro ao adicionar o produto ao carrinho.", "error");
+    }
+  }
   const excluir = async (id: number) => {
     const confirmar = window.confirm("Tem certeza que deseja excluir este produto?");
     if (!confirmar) return;
@@ -103,7 +126,7 @@ const Catalogo: React.FC = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <span>R${prod.preco.toFixed(2)}</span>
                   <div className="btn-group">
-                    {ADM  ? (
+                    {ADM ? (
                       <>
                         <Link to={`/prodincluir/${prod.id}`} className="btn btn-primary btn-sm">
                           Alterar
@@ -116,9 +139,11 @@ const Catalogo: React.FC = () => {
                         </button>
                       </>
                     ) : (
-                      <Link to="/carrinho" className="btn btn-success btn-sm">
+                      <button className="btn btn-success btn-sm"
+                        onClick={() => adicionarAoCarrinho(prod.id)}
+                      >
                         Comprar
-                      </Link>
+                      </button>
                     )}
                   </div>
                 </div>
@@ -127,7 +152,7 @@ const Catalogo: React.FC = () => {
           ))}
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </>
   );
 };

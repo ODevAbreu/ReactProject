@@ -57,16 +57,30 @@ const Carrinho: React.FC = () => {
     setTotal(novoTotal);
   }, [produtos]);
 
-  const carregarCarrinho = async (userId: number) => {
-    try {
-      const carrinho = await CarrinhoService.listar(userId);
-      setProdutos(Array.isArray(carrinho) ? carrinho : []);
-    } catch (error) {
-      console.error("Erro ao carregar carrinho:", error);
-      Swal.fire("Erro", "Falha ao carregar carrinho", "error");
-      setProdutos([]);
-    }
-  };
+const carregarCarrinho = async (userId: number) => {
+  try {
+    const carrinho = await CarrinhoService.listar(userId);
+    
+    const produtosMapeados = Array.isArray(carrinho)
+      ? carrinho.map((prod: any) => ({
+          id: prod.ID_Produto,
+          nome: prod.Nome_Produto,
+          descr: prod.Descr_Produto,
+          preco: prod.Preco_prod,
+          tipo: prod.Tipo_prod,
+          qtd: prod.Qtn_Produto,
+          imagem: prod.imagem_prod && prod.imagem_prod !== "null"
+          ? `http://localhost:8080${prod.imagem_prod}`
+          : "/img/coffe.jpeg",
+        }))
+      : [];
+    setProdutos(produtosMapeados);
+  } catch (error) {
+    console.error("Erro ao carregar carrinho:", error);
+    Swal.fire("Erro", "Falha ao carregar carrinho", "error");
+    setProdutos([]);
+  }
+};
 
   const carregarEnderecos = async (userId: number) => {
     try {
@@ -103,6 +117,7 @@ const Carrinho: React.FC = () => {
       Swal.fire("Erro", "Falha ao remover produto", "error");
     }
   };
+
   const ExcluirEndereco = async (id: number) => {
     try {
       await enderecoService.excluir(id)
@@ -120,6 +135,7 @@ const Carrinho: React.FC = () => {
       Swal.fire("Erro", "Falha ao excluir endereço", "error");
     }
   }	
+
   const confirmarExclusaoEndereco = (id: number) => {
     Swal.fire({
       title: "Tem certeza?",
@@ -174,7 +190,7 @@ const Carrinho: React.FC = () => {
                 <div className="row g-0 align-items-center">
                   <div className="col-md-2 text-center">
                     <img 
-                      src={`/imagem_produto/${produto.id}`} 
+                      src={`/2025api copy${produto.imagem}`} 
                       alt={produto.nome} 
                       className="img-fluid rounded"
                       style={{ maxWidth: '80px' }}
@@ -202,7 +218,7 @@ const Carrinho: React.FC = () => {
                     </button>
                   </div>
                   <div className="col-md-2 text-end">
-                    <p className="fw-bold">R$ {produto.preco.toFixed(2)}</p>
+                    <p className="fw-bold">R$ {produto.preco}</p>
                     <button 
                       className="btn btn-danger btn-sm"
                       onClick={() => removerProduto(produto.id)}
