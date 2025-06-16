@@ -24,22 +24,76 @@ aside input {
     border-color: var(--primary-color)
 }
 
+/* Cards do catálogo */
 .card-deck {
     width: 100%;
     display: flex;
-    justify-content: start;
-    align-items: start;
-    gap: 5%;
-    padding-left: 5%;
-    padding-right: 1.5%;
+    justify-content: flex-start; 
+    align-items: flex-start;
+    gap: 48px 32px; 
+    padding: 32px;
     flex-wrap: wrap;
-
 }
 
-.card {
-    margin: 10px;
+.catalogo .card,
+.card-deck .card {
+    width: 260px;
+    margin: 0;
     color: var(--light-color);
-    background-color: var(--secondary-color);
+    background-color: #fff; /* Fundo branco */
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    transition: transform 0.2s;
+}
+
+.catalogo .card:hover,
+.card-deck .card:hover {
+    transform: translateY(-4px) scale(1.03);
+}
+
+.catalogo .card-img-top,
+.card-deck .card-img-top {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.catalogo .card-body,
+.card-deck .card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.catalogo .card-title,
+.card-deck .card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #4A3428; /* Cor do nome do produto */
+}
+
+.catalogo .card-text,
+.card-deck .card-text {
+    font-size: 0.98rem;
+    margin-bottom: 16px;
+    color: #0a0000;
+}
+
+.valor-produto {
+    color: #080808; /* Cor do valor/preço */
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.btn-group {
+    gap: 8px;
 }
 
 .btn {

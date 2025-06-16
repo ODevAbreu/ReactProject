@@ -56,12 +56,25 @@ const finalizar = async (ID_Compra: number,idEndereco: any,pagamento: any, idUsu
         body: JSON.stringify({ ID_Compra: ID_Compra, idEndereco: idEndereco, pagamento: pagamento,idUsuario:idUsuario }),
     }).then((response) => response.json());
 };
+
+const historicoCompras = async (idUsuario: number) => {
+    const token = localStorage.getItem("token");
+    return await fetch(`http://localhost:8080/api/compras/historico/${idUsuario}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        }
+    }).then((response) => response.json());
+};
+
 const CarrinhoService = {
     listar,
     adicionar,
     atualizarQuantidade,
     remover,
-    finalizar
+    finalizar,
+    historicoCompras
 };
 
 export default CarrinhoService;

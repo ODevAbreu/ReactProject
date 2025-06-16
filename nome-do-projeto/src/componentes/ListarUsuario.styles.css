@@ -6,10 +6,12 @@
   margin: 0 auto;
 }
 
+
+
 .container-listagem .titulo-principal {
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
-  color: #3E2723;
+  color: #000000;
   text-align: center;
   margin-bottom: 40px;
   font-weight: 600;
@@ -43,9 +45,9 @@
 .col-id { width: 5%; }
 .col-nome { width: 20%; }
 .col-email { width: 28%; }
-.col-cpf { width: 15%; }
-.col-telefone { width: 15%; }
-.col-data { width: 20%; }
+.col-cpf { width: 20%; }
+.col-telefone { width: 20%; }
+.col-data { width: 15%; }
 .col-acoes { width: 30%; }
 
 .tabela-usuarios tbody tr {
@@ -100,4 +102,87 @@
 
 .botao-deletar:hover {
   background-color: #b71c1c;
+}
+
+/* Histórico de Compras */
+.historico-container {
+  margin: 40px auto;
+  max-width: 900px;
+}
+
+.titulo-secundario {
+  color: #050505;
+  margin-bottom: 24px;
+  font-weight: 700;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.card-compra {
+  margin-bottom: 40px;
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-left: 8px solid #6D4C41;
+}
+
+.card-compra-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card-compra-header-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.card-compra-info {
+  font-size: 1.1rem;
+  color: #4E342E;
+}
+
+.card-compra-status {
+  color: #a50427;
+}
+
+.card-compra-endereco {
+  text-align: right;
+  font-size: 0.95rem;
+  color: #5D4037;
+}
+
+.tabela-historico {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border-collapse: separate;
+}
+
+.tabela-historico thead {
+  background-color: #5D4037;
+  color: #fff;
+}
+
+.tabela-historico th, .tabela-historico td {
+  padding: 10px;
+  text-align: center;
+}
+
+.tabela-historico img {
+  max-width: 80px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.tabela-historico tfoot tr {
+  font-weight: bold;
+  background-color: #efebe9;
+}
+
+.tabela-historico tfoot td {
+  color: #4E342E;
 }

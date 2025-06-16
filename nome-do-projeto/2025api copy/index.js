@@ -508,5 +508,57 @@ app.delete("/api/carrinho/", Autenticar, (req, res) => {
     });
 });
 
+// Histórico de compras do usuário
+app.get("/api/compras/historico/:idUsuario", (req, res) => {
+    const idUsuario = req.params.idUsuario;
+
+    // Busca todas as compras fechadas do usuário
+    const sqlCompras = `
+        SELECT * FROM compra
+        WHERE ID_Usuario = ? AND Status = 'fechada'
+        ORDER BY Data_Compra DESC
+    `;
+    conn.query(sqlCompras, [idUsuario], (err, compras) => {
+        if (err) return res.status(500).json({ erro: err.message });
+
+        if (!compras.length) return res.json([]);
+
+        // Para cada compra, busca os produtos
+        const comprasComProdutos = [];
+        let pendentes = compras.length;
+
+        compras.forEach((compra, idx) => {
+            const sqlProdutos = `
+                SELECT 
+                    p.ID_Produto, p.Nome_Produto, p.Preco_prod, p.imagem_prod,
+                    qp.Qtn_Produto,
+                    (qp.Qtn_Produto * p.Preco_prod) as Subtotal
+                FROM qtd_produto qp
+                JOIN produto p ON p.ID_Produto = qp.fk_Produto_ID_Produto
+                WHERE qp.fk_Compra_ID_Compra = ?
+            `;
+            conn.query(sqlProdutos, [compra.ID_Compra], (err2, produtos) => {
+                if (err2) return res.status(500).json({ erro: err2.message });
+
+                // Calcula total da compra
+                const total = produtos.reduce((acc, prod) => acc + Number(prod.Subtotal), 0);
+
+                comprasComProdutos[idx] = {
+                    ...compra,
+                    produtos,
+                    total
+                };
+
+                pendentes--;
+                if (pendentes === 0) {
+                    // Ordena por data (opcional)
+                    comprasComProdutos.sort((a, b) => new Date(b.Data_Compra) - new Date(a.Data_Compra));
+                    res.json(comprasComProdutos);
+                }
+            });
+        });
+    });
+});
+
 
 

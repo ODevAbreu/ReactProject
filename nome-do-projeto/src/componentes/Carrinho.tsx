@@ -71,8 +71,8 @@ const carregarCarrinho = async (userId: number) => {
           tipo: prod.Tipo_prod,
           qtd: prod.Qtn_Produto,
           imagem: prod.imagem_prod && prod.imagem_prod !== "null"
-          ? `http://localhost:8080${prod.imagem_prod}`
-          : "/img/coffe.jpeg",
+  ? `http://localhost:8080${prod.imagem_prod}`
+  : "/img/coffe.jpeg",
         }))
       : [];
     setProdutos(produtosMapeados);
@@ -197,7 +197,7 @@ const carregarCarrinho = async (userId: number) => {
                 <div className="row g-0 align-items-center">
                   <div className="col-md-2 text-center">
                     <img 
-                      src={`/2025api copy${produto.imagem}`} 
+                      src={produto.imagem}
                       alt={produto.nome} 
                       className="img-fluid rounded"
                       style={{ maxWidth: '80px' }}

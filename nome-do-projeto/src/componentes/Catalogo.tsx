@@ -113,18 +113,17 @@ const Catalogo: React.FC = () => {
 
         <div className="card-deck d-flex flex-wrap justify-content-center gap-4 p-4">
           {produtos?.map((prod) => (
-            <div key={prod.id} className="card" style={{ width: "18rem" }}>
+            <div key={prod.id} className="card">
               <img
                 className="card-img-top"
                 src={prod.imagem}
                 alt="imagem do produto"
-                style={{ maxHeight: '200px', objectFit: 'cover' }}
               />
               <div className="card-body">
                 <h5 className="card-title">{prod.nome}</h5>
                 <p className="card-text">{prod.descr}</p>
                 <div className="d-flex justify-content-between align-items-center">
-                  <span>R${prod.preco.toFixed(2)}</span>
+                  <span className="valor-produto">R${prod.preco.toFixed(2)}</span>
                   <div className="btn-group">
                     {ADM ? (
                       <>
