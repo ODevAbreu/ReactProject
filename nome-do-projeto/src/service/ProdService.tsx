@@ -31,8 +31,13 @@ const buscarPorId = async (id: string) => {
     }) .then((response) => response.json());
 }
 const excluir = async (id: string, produto?: ProdModel) => {
+    const token = localStorage.getItem("token");
     return await fetch(`http://localhost:8080/api/produto/${id}`, {
-        method: "DELETE"
+        method: "DELETE", 
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization":`Bearer ${token}`
+        },
     })
         .then((response) => response.json());
 }

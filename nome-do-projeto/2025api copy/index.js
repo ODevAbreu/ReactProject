@@ -17,7 +17,7 @@ app.use('/uploads', express.static('uploads'));
 const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "PUC@1234",
     database: "coffee",
     port: "3306"
 });
@@ -92,14 +92,11 @@ app.get('/api/usuario', (req, res) => {
     });
 });
 app.get('/api/usuario/:id', Autenticar, function (req, res) {
-    // const { id } = req.params;
-
-    // console.log(id)
-
-    let sql = `SELECT u.Id, u.Nome FROM usuario u WHERE u.Id = ${id}`;
-    conn.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log(result)
+    console.log("chegou")
+    const { id } = req.params;
+    const sql = "SELECT nome, email, senha, Dt_Nasc, telefone, cpf FROM usuario WHERE id = ? ";
+    conn.query(sql, id , (err, result) => {
+        if (err) return res.status(500).json();
         res.status(200).json(result[0]);
     });
 });
@@ -108,14 +105,31 @@ app.get('/api/usuario/:id', Autenticar, function (req, res) {
 
 app.post('/api/usuario', (req, res) => {
     const usuario = req.body;
-    const sql = `INSERT INTO usuario (nome, email, senha, Dt_Nasc, telefone, cpf) VALUES 
-        ('${usuario.nome}', '${usuario.email}', '${usuario.senha}', '${usuario.Dt_Nasc}',
-        '${usuario.telefone}', '${usuario.cpf}')`;
-    conn.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ success: false, message: "erro de inserção", erro: err.message });
-        res.status(201).json({ success: true, id: result.insertId, ...usuario });
-    });
+
+    if (usuario.id) {
+        const sql = `UPDATE usuario SET nome = ?, email = ?, senha = ?, Dt_Nasc = ?, telefone = ?, cpf = ? WHERE id = ?`;
+        const values = [usuario.nome, usuario.email, usuario.senha, usuario.Dt_Nasc, usuario.telefone, usuario.cpf, usuario.id];
+
+        conn.query(sql, values, (err, result) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: "Erro ao atualizar", erro: err.message });
+            }
+            res.status(200).json({ success: true, message: "Usuário atualizado com sucesso", ...usuario });
+        });
+
+    } else {
+        const sql = `INSERT INTO usuario (nome, email, senha, Dt_Nasc, telefone, cpf) VALUES (?, ?, ?, ?, ?, ?)`;
+        const values = [usuario.nome, usuario.email, usuario.senha, usuario.Dt_Nasc, usuario.telefone, usuario.cpf];
+
+        conn.query(sql, values, (err, result) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: "Erro de inserção", erro: err.message });
+            }
+            res.status(201).json({ success: true, id: result.insertId, ...usuario });
+        });
+    }
 });
+
 
 app.delete('/api/usuario/:id', (req, res) => {
     const id = req.params.id;
@@ -213,8 +227,8 @@ app.post('/api/endereco', Autenticar, (req, res) => {
         ('${endereco.Rua}', '${endereco.Numero}', '${endereco.Cidade}', '${endereco.CEP}',
         '${endereco.Bairro}', '${endereco.fk_ID_Usuario}')`;
     conn.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ message: "erro de inserção", erro: err.message });
-        res.status(201).json({ id: result.insertId, ...endereco });
+        if (err) return res.status(500).json({ sucesses: false, message: "erro de inserção", erro: err.message });
+        res.status(201).json({ success: true , id: result.insertId, ...endereco });
     });
 });
 

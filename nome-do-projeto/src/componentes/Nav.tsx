@@ -53,7 +53,7 @@ const Nav: React.FC = () => {
           {usuario ? (
             <>
               <li>
-                <Link to="/listarUsuario" className="text-decoration-none">
+                <Link to={`/listarUsuario/${usuario.Id}`} className="text-decoration-none">
                   Olá, {usuario.Nome}
                 </Link>
               </li>

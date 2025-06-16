@@ -45,8 +45,13 @@ const listar = async (userId: number) => {
   return Array.isArray(data) ? data : []; // <- aqui garante um array
 };
 const excluir = async (id: number) => {
+    const token = localStorage.getItem("token");
     return await fetch(`http://localhost:8080/api/endereco/${id}`, {
-        method: "DELETE"
+        method: "DELETE" ,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization":`Bearer ${token}`
+        },
     }).then((response) => response.json());
 }
 

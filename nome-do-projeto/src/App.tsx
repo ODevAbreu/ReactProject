@@ -22,10 +22,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/cadastro/:id" element={<Cadastro />} />
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/prodincluir" element={<ProdIncluir />} />
         <Route path="/prodincluir/:id" element={<ProdIncluir />} />
-        <Route path="/listarUsuario" element={<ListarUsuario />} />
+        <Route path="/listarUsuario/:id" element={<ListarUsuario />} />
         <Route path="/CadastroEndereco" element={<CadastroEndereco/>} />
         <Route path="/editarendereco/" element={<EditarEndereco/>} />
         <Route path="/editarendereco/:id" element={<EditarEndereco/>} />
